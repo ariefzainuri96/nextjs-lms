@@ -1,12 +1,12 @@
 "use client";
 
 import { useFormState, useFormStatus } from "react-dom";
+import { signup } from "./actions";
 import CustomInput from "@/components/CustomInput";
 import Button from "@/components/Button";
-import { login } from "./actions";
 
 export default function Page() {
-  const [message, dispatch] = useFormState(login, undefined);
+  const [message, dispatch] = useFormState(signup, undefined);
   const { pending } = useFormStatus();
 
   return (
@@ -23,9 +23,8 @@ export default function Page() {
           className="mt-2"
           disabled={pending}
           type="submit"
-          content={"Login"}
+          content={"Register"}
         />
-        {message && <p className="mt-2 text-lg font-semibold">{message}</p>}
       </form>
     </>
   );

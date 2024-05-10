@@ -1,13 +1,19 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Footer from "./Footer";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "Flowmazon",
-  description: "We make your wallet cry",
+  title: "HGC Clone",
+  description: "",
+};
+
+export const viewport: Viewport = {
+  initialScale: 1,
+  width: "device-width",
+  userScalable: false,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -16,12 +22,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <main className="m-auto h-full min-w-[400px] max-w-7xl p-4">
-          {children}
-        </main>
-        <Footer />
+    <html lang="en" className="h-screen w-screen">
+      <body
+        className={
+          `${inter.variable}` + " flex h-full w-full flex-col bg-white"
+        }
+      >
+        <main className="flex-1 bg-white">{children}</main>
       </body>
     </html>
   );
