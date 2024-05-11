@@ -10,7 +10,7 @@ export default function Page() {
   const { pending } = useFormStatus();
 
   return (
-    <>
+    <div className="p-4">
       <form action={dispatch}>
         <CustomInput type="text" name="username" label={"Username"} />
         <CustomInput
@@ -18,6 +18,7 @@ export default function Page() {
           label={"Password"}
           type="password"
           name="password"
+          message={message}
         />
         <Button
           className="mt-2"
@@ -26,6 +27,6 @@ export default function Page() {
           content={"Register"}
         />
       </form>
-    </>
+    </div>
   );
 }

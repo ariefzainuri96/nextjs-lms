@@ -8,6 +8,7 @@ import React, { ComponentProps } from "react";
 type ButtonProps = {
   content: string;
   iconName?: "add" | "search";
+  pending?: boolean;
   className?: string;
   implementBreakPoints?: boolean;
   variant?: "outlined" | "full";
@@ -28,6 +29,7 @@ const Button = ({
   content,
   iconName,
   className,
+  pending,
   implementBreakPoints = false,
   variant = "full",
   onButtonClick,
@@ -46,7 +48,8 @@ const Button = ({
       {...props}
     >
       {iconName && <IconFromName iconName={iconName} />}
-      {content}
+      {pending && <span className="loading loading-dots loading-sm bg-white" />}
+      {pending ? "" : content}
     </button>
   );
 };

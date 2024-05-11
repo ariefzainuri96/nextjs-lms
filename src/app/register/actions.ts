@@ -1,6 +1,7 @@
 "use server";
 
 import { lucia } from "@/lib/auth/lucia";
+import { RoleLevel } from "@/lib/common_enum";
 import dbConnect from "@/lib/db/mongoose";
 import user from "@/lib/models/user";
 import { cookies } from "next/headers";
@@ -19,7 +20,12 @@ export async function signup(_: any, formData: FormData) {
     const _user = await user.create({
       username: username,
       password: hashedPassword,
+      level: RoleLevel.Teacher,
     });
+
+    if (!_user) {
+      return "Gagal membuat user";
+    }
 
     const session = await lucia.createSession(_user._id, {});
     const sessionCookie = lucia.createSessionCookie(session.id);
@@ -29,10 +35,7 @@ export async function signup(_: any, formData: FormData) {
       sessionCookie.attributes,
     );
   } catch (e) {
-    console.log("error", e);
-    return {
-      error: "An unknown error occurred",
-    };
+    return `${e}`;
   }
 
   return redirect("/");

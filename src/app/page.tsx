@@ -1,7 +1,11 @@
-import { lucia, validateRequest } from "@/lib/auth/lucia";
+import { validateRequest } from "@/lib/auth/lucia";
 import dbConnect from "@/lib/db/mongoose";
-import { cookies } from "next/headers";
+import Link from "next/link";
 import { redirect } from "next/navigation";
+import { logout } from "./actions";
+import { Suspense } from "react";
+import SchoolList from "./(components)/SchoolList";
+import AddSchoolModal from "./(components)/AddSchoolModal";
 
 export default async function Home() {
   await dbConnect();
@@ -12,35 +16,20 @@ export default async function Home() {
     redirect("/register");
   }
 
-  async function logout(formData: FormData) {
-    "use server";
-
-    const { session } = await validateRequest();
-    if (!session) {
-      return {
-        error: "Unauthorized",
-      };
-    }
-
-    await lucia.invalidateSession(session.id);
-
-    const sessionCookie = lucia.createBlankSessionCookie();
-    cookies().set(
-      sessionCookie.name,
-      sessionCookie.value,
-      sessionCookie.attributes,
-    );
-    return redirect("/login");
-  }
-
   return (
-    <div className="flex flex-col items-start">
-      <p>Dashboard</p>
-      <form action={logout}>
-        <button className="btn-outlined" type="submit">
-          Logout
-        </button>
-      </form>
+    <div className="mx-4 flex flex-col items-start">
+      <div className="mt-2 flex flex-row gap-2 overflow-y-auto">
+        <AddSchoolModal />
+        <form action={logout}>
+          <button className="btn-outlined" type="submit">
+            Logout
+          </button>
+        </form>
+      </div>
+      <p className="mt-2">Daftar Sekolah</p>
+      <Suspense fallback={"Loading..."}>
+        <SchoolList />
+      </Suspense>
     </div>
   );
 }

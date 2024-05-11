@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 interface User {
   password: string;
   username: string;
+  level: string;
 }
 
 export const UserSchema = new mongoose.Schema<User>({
@@ -12,6 +13,10 @@ export const UserSchema = new mongoose.Schema<User>({
   },
   password: {
     type: String,
+    required: true,
+  },
+  level: {
+    type: String, // Teacher, Student, Admin
     required: true,
   },
 });

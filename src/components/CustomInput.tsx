@@ -7,11 +7,13 @@ type CustomInputProps = {
   label: string;
   enable?: boolean;
   className?: string;
+  message?: string | undefined;
 } & ComponentProps<"input">;
 
 const CustomInput = ({
   className,
   label,
+  message,
   enable = true,
   ...props
 }: CustomInputProps) => {
@@ -26,6 +28,7 @@ const CustomInput = ({
         )}
         {...props}
       />
+      {message && <p className="mt-1 text-sm text-red-300">{message}</p>}
     </div>
   );
 };
