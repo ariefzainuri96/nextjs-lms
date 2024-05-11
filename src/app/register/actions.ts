@@ -23,9 +23,7 @@ export async function signup(_: any, formData: FormData) {
       level: RoleLevel.Teacher,
     });
 
-    if (!_user) {
-      return "Gagal membuat user";
-    }
+    if (!_user) return "Gagal membuat user";
 
     const session = await lucia.createSession(_user._id, {});
     const sessionCookie = lucia.createSessionCookie(session.id);
