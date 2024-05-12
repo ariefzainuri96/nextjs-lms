@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { School } from "@/lib/models/school";
 import { revalidatePath } from "next/cache";
+import { delay } from "@/lib/utils/common_functions";
 
 export async function logout(formData: FormData) {
   const { session } = await validateRequest();

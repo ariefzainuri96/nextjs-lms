@@ -41,8 +41,10 @@ const Button = ({
     <button
       onClick={onButtonClick}
       className={twMerge(
-        "flex flex-row items-center gap-2 rounded-lg px-[16px] py-[10px] text-white",
-        variant === "full" ? "bg-[#E24955]" : "border-[1px] border-[#D0D5DD]",
+        "flex flex-row items-center gap-2 rounded-lg px-[16px] py-[10px] text-white duration-150",
+        variant === "full"
+          ? "bg-[#E24955] hover:bg-[#c23b46]"
+          : "border-[1px] border-[#D0D5DD]",
         className,
       )}
       {...props}

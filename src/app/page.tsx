@@ -1,6 +1,5 @@
 import { validateRequest } from "@/lib/auth/lucia";
 import dbConnect from "@/lib/db/mongoose";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { logout } from "./actions";
 import { Suspense } from "react";

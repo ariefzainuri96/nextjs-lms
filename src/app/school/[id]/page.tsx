@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import Link from "next/link";
 import React from "react";
 
@@ -6,6 +7,11 @@ interface SchoolDetailPageProps {
     id: string;
   };
 }
+
+export const metadata: Metadata = {
+  title: "SDN",
+  description: "",
+};
 
 const SchoolDetailPage = ({ params: { id } }: SchoolDetailPageProps) => {
   return (

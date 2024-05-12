@@ -7,7 +7,6 @@ import { addSchool } from "../actions";
 
 const AddSchoolModal = () => {
   const [message, dispatch] = useFormState(addSchool, undefined);
-  const { pending } = useFormStatus();
 
   return (
     <>
@@ -38,13 +37,7 @@ const AddSchoolModal = () => {
               message={message}
             />
             <div className="flex w-full flex-row justify-end">
-              <Button
-                disabled={pending}
-                type="submit"
-                pending={pending}
-                content={"Tambah"}
-                className="mt-4"
-              />
+              <ButtonTambah />
             </div>
           </form>
         </div>
@@ -54,3 +47,17 @@ const AddSchoolModal = () => {
 };
 
 export default AddSchoolModal;
+
+const ButtonTambah = () => {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button
+      disabled={pending}
+      type="submit"
+      pending={pending}
+      content={"Tambah"}
+      className="mt-4"
+    />
+  );
+};
