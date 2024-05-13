@@ -4,7 +4,9 @@ import { redirect } from "next/navigation";
 import { logout } from "./actions";
 import { Suspense } from "react";
 import SchoolList from "./(components)/SchoolList";
-import AddSchoolModal from "./(components)/AddSchoolModal";
+import { AddSchoolModal } from "./(components)/AddSchoolModal";
+import { IUser, User } from "@/lib/models/user";
+import { RoleLevel } from "@/lib/common_enum";
 
 export default async function Home() {
   await dbConnect();
@@ -13,6 +15,14 @@ export default async function Home() {
 
   if (!user) {
     redirect("/register");
+  }
+
+  const profile: IUser | null = await User.findOne({
+    username: user.username,
+  });
+
+  if (profile && profile.level !== RoleLevel.Teacher) {
+    redirect("/dashboard-student");
   }
 
   return (

@@ -4,8 +4,9 @@ import Button from "@/components/Button";
 import CustomInput from "@/components/CustomInput";
 import { useFormState, useFormStatus } from "react-dom";
 import { addSchool } from "../actions";
+import { useState } from "react";
 
-const AddSchoolModal = () => {
+export const AddSchoolModal = () => {
   const [message, dispatch] = useFormState(addSchool, undefined);
 
   return (
@@ -22,12 +23,16 @@ const AddSchoolModal = () => {
       </button>
       <dialog id="my_modal" className="modal">
         <div className="modal-box">
-          <form method="dialog">
-            {/* if there is a button in form, it will close the modal */}
-            <button className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2">
-              ✕
-            </button>
-          </form>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+
+              (document.getElementById("my_modal") as HTMLFormElement).close();
+            }}
+            className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2"
+          >
+            ✕
+          </button>
           <h3 className="mt-2 text-lg font-bold">Tambah Sekolah</h3>
           <form action={dispatch}>
             <CustomInput
@@ -45,8 +50,6 @@ const AddSchoolModal = () => {
     </>
   );
 };
-
-export default AddSchoolModal;
 
 const ButtonTambah = () => {
   const { pending } = useFormStatus();

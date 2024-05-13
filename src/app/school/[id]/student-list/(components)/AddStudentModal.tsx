@@ -7,11 +7,10 @@ import { addStudent } from "../actions";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-const AddStudentModal = () => {
+export const AddStudentModal = () => {
   const [isHasSubclass, setIsHasSubclass] = useState(false);
 
   const [message, dispatch] = useFormState(addStudent, undefined);
-  const { pending } = useFormStatus();
 
   const pathname = usePathname();
 
@@ -88,13 +87,7 @@ const AddStudentModal = () => {
               className="mt-2"
             />
             <div className="flex w-full flex-row justify-end">
-              <Button
-                disabled={pending}
-                type="submit"
-                pending={pending}
-                content={"Tambah"}
-                className="mt-4"
-              />
+              <ButtonAdd />
             </div>
           </form>
         </div>
@@ -103,4 +96,16 @@ const AddStudentModal = () => {
   );
 };
 
-export default AddStudentModal;
+const ButtonAdd = () => {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button
+      disabled={pending}
+      type="submit"
+      pending={pending}
+      content={"Tambah"}
+      className="mt-4"
+    />
+  );
+};

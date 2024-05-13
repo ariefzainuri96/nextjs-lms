@@ -8,7 +8,6 @@ import Link from "next/link";
 
 export default function Page() {
   const [message, dispatch] = useFormState(login, undefined);
-  const { pending } = useFormStatus();
 
   return (
     <div className="p-4">
@@ -21,7 +20,7 @@ export default function Page() {
           name="password"
         />
         <div className="mt-2 flex flex-row gap-2">
-          <Button disabled={pending} type="submit" content={"Login"} />
+          <ButtonSubmit />
           <Link className="btn-outlined" href={"/register"}>
             Register
           </Link>
@@ -31,3 +30,9 @@ export default function Page() {
     </div>
   );
 }
+
+const ButtonSubmit = () => {
+  const { pending } = useFormStatus();
+
+  return <Button disabled={pending} type="submit" content={"Login"} />;
+};

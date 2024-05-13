@@ -2,7 +2,7 @@
 
 import { lucia } from "@/lib/auth/lucia";
 import dbConnect from "@/lib/db/mongoose";
-import user from "@/lib/models/user";
+import { IUser, User } from "@/lib/models/user";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -15,7 +15,7 @@ export async function login(_: any, formData: FormData) {
   // you can use zod or any other library to validate the formData
 
   await dbConnect();
-  const existingUser = await user.findOne({ username: username });
+  const existingUser = await User.findOne({ username: username });
 
   if (!existingUser) {
     return "Data user tidak ditemukan";

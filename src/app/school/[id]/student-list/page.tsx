@@ -1,6 +1,6 @@
 import React from "react";
-import AddStudentModal from "./(components)/AddStudentModal";
 import StudentList from "./(components)/StudentList";
+import { AddStudentModal } from "./(components)/AddStudentModal";
 
 const StudentListPage = () => {
   return (
@@ -9,7 +9,7 @@ const StudentListPage = () => {
         <AddStudentModal />
       </div>
       <div className="mt-2 h-[1px] w-full bg-slate-200" />
-      <div className="mt-2 flex flex-1 flex-col overflow-y-auto">
+      <div className="mt-2 flex flex-1 flex-col overflow-y-auto px-4">
         <StudentList />
       </div>
     </div>

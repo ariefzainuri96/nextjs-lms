@@ -2,7 +2,7 @@
 
 import { RoleLevel } from "@/lib/common_enum";
 import { IStudent, Student } from "@/lib/models/student";
-import user from "@/lib/models/user";
+import { User } from "@/lib/models/user";
 import { revalidatePath } from "next/cache";
 
 const bcrypt = require("bcrypt");
@@ -31,7 +31,7 @@ export async function addStudent(_: any, formData: FormData) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const _user = await user.create({
+    const _user = await User.create({
       username: username,
       password: hashedPassword,
       level: RoleLevel.Student,

@@ -10,14 +10,21 @@ const StudentList = () => {
   const id = params.get("id") ?? "";
 
   const [students, setStudents] = useState<IStudent[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function _getStudents() {
+      setLoading(true);
       setStudents(await getStudents(id));
+      setLoading(false);
     }
 
     _getStudents();
-  }, [id]);
+  }, []);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <>
