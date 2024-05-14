@@ -37,9 +37,9 @@ export const IcEdit = ({ width, height, fill, stroke }: IconProps) => {
       <path
         d="M15.4998 5.49994L18.3282 8.32837M3 20.9997L3.04745 20.6675C3.21536 19.4922 3.29932 18.9045 3.49029 18.3558C3.65975 17.8689 3.89124 17.4059 4.17906 16.9783C4.50341 16.4963 4.92319 16.0765 5.76274 15.237L17.4107 3.58896C18.1918 2.80791 19.4581 2.80791 20.2392 3.58896C21.0202 4.37001 21.0202 5.63634 20.2392 6.41739L8.37744 18.2791C7.61579 19.0408 7.23497 19.4216 6.8012 19.7244C6.41618 19.9932 6.00093 20.2159 5.56398 20.3879C5.07171 20.5817 4.54375 20.6882 3.48793 20.9012L3 20.9997Z"
         stroke={stroke ?? "#000000"}
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
@@ -86,14 +86,14 @@ export const IcWarning = ({ width, height, fill, stroke }: IconProps) => {
         height="48"
         rx="24"
         stroke="#FEF3F2"
-        stroke-width="8"
+        strokeWidth="8"
       />
       <path
         d="M28.8359 24.0601V28.0601M28.8359 32.0601H28.8459M38.8359 28.0601C38.8359 33.5829 34.3588 38.0601 28.8359 38.0601C23.3131 38.0601 18.8359 33.5829 18.8359 28.0601C18.8359 22.5372 23.3131 18.0601 28.8359 18.0601C34.3588 18.0601 38.8359 22.5372 38.8359 28.0601Z"
         stroke="#D92D20"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
@@ -111,9 +111,9 @@ export const IcUpload = ({ width, height, fill, stroke }: IconProps) => {
       <path
         d="M4.83203 17.8003V19.8003C4.83203 20.3307 5.04274 20.8394 5.41782 21.2145C5.79289 21.5896 6.3016 21.8003 6.83203 21.8003H18.832C19.3625 21.8003 19.8712 21.5896 20.2462 21.2145C20.6213 20.8394 20.832 20.3307 20.832 19.8003V17.8003M7.83203 9.80029L12.832 4.80029M12.832 4.80029L17.832 9.80029M12.832 4.80029V16.8003"
         stroke={stroke ?? "#344054"}
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
@@ -174,9 +174,9 @@ export const IcTrash = ({ width, height, fill, stroke }: IconProps) => {
       <path
         d="M2.5 5.82766H4.16667M4.16667 5.82766H17.5M4.16667 5.82766V17.4943C4.16667 17.9364 4.34226 18.3603 4.65482 18.6728C4.96738 18.9854 5.39131 19.161 5.83333 19.161H14.1667C14.6087 19.161 15.0326 18.9854 15.3452 18.6728C15.6577 18.3603 15.8333 17.9364 15.8333 17.4943V5.82766H4.16667ZM6.66667 5.82766V4.16099C6.66667 3.71896 6.84226 3.29504 7.15482 2.98248C7.46738 2.66992 7.89131 2.49432 8.33333 2.49432H11.6667C12.1087 2.49432 12.5326 2.66992 12.8452 2.98248C13.1577 3.29504 13.3333 3.71896 13.3333 4.16099V5.82766M8.33333 9.99432V14.9943M11.6667 9.99432V14.9943"
         stroke={stroke ?? "#E24955"}
-        stroke-width="1.66667"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.66667"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
@@ -194,9 +194,9 @@ export const IcAdd = ({ width, height, fill, stroke }: IconProps) => {
       <path
         d="M4 12H20M12 4V20"
         stroke={stroke ?? "#000000"}
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

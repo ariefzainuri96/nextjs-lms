@@ -2,7 +2,7 @@
 
 import { lucia } from "@/lib/auth/lucia";
 import dbConnect from "@/lib/db/mongoose";
-import { IUser, User } from "@/lib/models/user";
+import { User } from "@/lib/models/user";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 

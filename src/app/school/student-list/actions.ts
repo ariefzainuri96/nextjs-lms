@@ -1,6 +1,7 @@
 "use server";
 
 import { RoleLevel } from "@/lib/common_enum";
+import dbConnect from "@/lib/db/mongoose";
 import { IStudent, Student } from "@/lib/models/student";
 import { User } from "@/lib/models/user";
 import { revalidatePath } from "next/cache";
@@ -20,6 +21,7 @@ export async function addStudent(_: any, formData: FormData) {
   );
 
   try {
+    await dbConnect();
     const _student = await Student.create({
       school_id: schoolId,
       full_name: fullName,
@@ -49,6 +51,8 @@ export async function addStudent(_: any, formData: FormData) {
 
 export async function getStudents(schoolId: string) {
   try {
+    await dbConnect();
+
     const students = await Student.where({
       school_id: schoolId,
     });

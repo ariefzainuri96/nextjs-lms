@@ -7,8 +7,13 @@ import { AddOrEditSchool } from "./AddOrEditSchool";
 
 const SchoolList = async () => {
   const { user } = await validateRequest();
-  const schools: ISchool[] = await School.where({
-    user_id: user?.id,
+  const schools: ISchool[] = (
+    await School.where({
+      user_id: user?.id,
+    })
+  ).map((element) => {
+    const obj: ISchool = JSON.parse(JSON.stringify(element));
+    return obj;
   });
 
   return (

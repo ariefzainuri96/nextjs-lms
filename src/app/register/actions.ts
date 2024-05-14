@@ -3,7 +3,7 @@
 import { lucia } from "@/lib/auth/lucia";
 import { RoleLevel } from "@/lib/common_enum";
 import dbConnect from "@/lib/db/mongoose";
-import user from "@/lib/models/user";
+import { User } from "@/lib/models/user";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -17,7 +17,7 @@ export async function signup(_: any, formData: FormData) {
 
   try {
     await dbConnect();
-    const _user = await user.create({
+    const _user = await User.create({
       username: username,
       password: hashedPassword,
       level: RoleLevel.Teacher,
