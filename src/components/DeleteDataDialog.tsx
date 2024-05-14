@@ -55,6 +55,7 @@ function DeleteForm() {
 
   return (
     <button
+      disabled={pending}
       aria-disabled={pending}
       type="submit"
       className={

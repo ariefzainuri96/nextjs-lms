@@ -1,12 +1,14 @@
 import { validateRequest } from "@/lib/auth/lucia";
 import dbConnect from "@/lib/db/mongoose";
 import { redirect } from "next/navigation";
-import { logout } from "./actions";
+import { deleteSchool, logout } from "./actions";
 import { Suspense } from "react";
 import SchoolList from "./(components)/SchoolList";
-import { AddSchoolModal } from "./(components)/AddSchoolModal";
 import { IUser, User } from "@/lib/models/user";
 import { RoleLevel } from "@/lib/common_enum";
+import DeleteDataDialog from "@/components/DeleteDataDialog";
+import { AddOrEditSchool } from "./(components)/AddOrEditSchool";
+import { AddOrEditSchoolModal } from "./(components)/AddOrEditSchoolModal";
 
 export default async function Home() {
   await dbConnect();
@@ -28,7 +30,7 @@ export default async function Home() {
   return (
     <div className="mx-4 flex flex-col items-start">
       <div className="mt-2 flex flex-row gap-2 overflow-y-auto">
-        <AddSchoolModal />
+        <AddOrEditSchool />
         <form action={logout}>
           <button className="btn-outlined" type="submit">
             Logout
@@ -39,6 +41,8 @@ export default async function Home() {
       <Suspense fallback={"Loading..."}>
         <SchoolList />
       </Suspense>
+      <DeleteDataDialog formAction={deleteSchool} />
+      <AddOrEditSchoolModal />
     </div>
   );
 }
