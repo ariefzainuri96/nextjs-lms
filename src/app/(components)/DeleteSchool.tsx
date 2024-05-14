@@ -2,7 +2,7 @@
 
 import { IcTrash } from "@/components/Icons";
 
-export const DeleteSchoolModal = ({ schoolId }: { schoolId: string }) => {
+export const DeleteSchool = ({ schoolId }: { schoolId: string }) => {
   return (
     <button
       className="rounded-md bg-slate-200 p-2 hover:bg-slate-300"

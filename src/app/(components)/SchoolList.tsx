@@ -2,7 +2,7 @@ import { validateRequest } from "@/lib/auth/lucia";
 import { ISchool, School } from "@/lib/models/school";
 import Link from "next/link";
 import React from "react";
-import { DeleteSchoolModal } from "./DeleteSchoolModal";
+import { DeleteSchool } from "./DeleteSchool";
 import { AddOrEditSchool } from "./AddOrEditSchool";
 
 const SchoolList = async () => {
@@ -15,13 +15,13 @@ const SchoolList = async () => {
     <div className="mt-2 grid grid-cols-3 gap-2">
       {schools.map((element, index) => {
         return (
-          <Link key={index} href={`/school/${element._id}`}>
+          <Link key={index} href={`/school?id=${element._id}`}>
             <div className="btn-outlined flex flex-col items-start">
               <p className="line-clamp-2 text-wrap">
                 {`${element.school_name}\n`}
               </p>
               <div className="mt-2 flex flex-row gap-2">
-                <DeleteSchoolModal schoolId={element._id} />
+                <DeleteSchool schoolId={element._id} />
                 <AddOrEditSchool
                   schoolName={element.school_name}
                   schoolId={element._id}

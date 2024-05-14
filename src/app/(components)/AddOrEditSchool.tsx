@@ -18,7 +18,7 @@ export const AddOrEditSchool = ({
         onClick={(e) => {
           e.preventDefault();
 
-          const newUrl = `?showaddoredit=true&content=${schoolName}&id=${schoolId}`;
+          const newUrl = `?showaddoredit=true${schoolName ? `&content=${schoolName}` : ""}${schoolId ? `&id=${schoolId}` : ""}`;
 
           window.history.pushState(null, "", newUrl);
         }}

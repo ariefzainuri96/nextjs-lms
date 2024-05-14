@@ -4,6 +4,7 @@ import { IStudent } from "@/lib/models/student";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getStudents } from "../actions";
+import { IcEdit, IcTrash } from "@/components/Icons";
 
 const StudentList = () => {
   const params = useSearchParams();
@@ -29,7 +30,20 @@ const StudentList = () => {
   return (
     <>
       {students.map((element) => {
-        return <div key={element._id}>{element.full_name}</div>;
+        return (
+          <div
+            className="btn-outlined flex flex-row items-center gap-2 hover:bg-transparent"
+            key={element._id}
+          >
+            <p className="flex-1">{element.full_name}</p>
+            <button className="ic-bordered">
+              <IcTrash />
+            </button>
+            <button className="ic-bordered">
+              <IcEdit width="21" height="21" />
+            </button>
+          </div>
+        );
       })}
     </>
   );

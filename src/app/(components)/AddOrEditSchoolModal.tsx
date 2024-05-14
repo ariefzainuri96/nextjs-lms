@@ -33,7 +33,7 @@ export const AddOrEditSchoolModal = () => {
           </h3>
           <form action={dispatch}>
             <CustomInput
-              defaultValue={content === null ? undefined : content}
+              defaultValue={content ?? ""}
               label={"Nama Sekolah"}
               name="school_name"
               className="mt-4"

@@ -4,7 +4,7 @@ import Button from "@/components/Button";
 import CustomInput from "@/components/CustomInput";
 import { useFormState, useFormStatus } from "react-dom";
 import { addStudent } from "../actions";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 export const AddStudentModal = () => {
@@ -12,7 +12,7 @@ export const AddStudentModal = () => {
 
   const [message, dispatch] = useFormState(addStudent, undefined);
 
-  const pathname = usePathname();
+  const params = useSearchParams();
 
   return (
     <>
@@ -83,7 +83,7 @@ export const AddStudentModal = () => {
               hidden={true}
               label={""}
               name="school_id"
-              value={pathname.split("/").slice(-2)[0]}
+              value={params.get("id") ?? ""}
               className="mt-2"
             />
             <div className="flex w-full flex-row justify-end">
