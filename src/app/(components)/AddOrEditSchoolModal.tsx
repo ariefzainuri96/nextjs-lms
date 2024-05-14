@@ -19,7 +19,7 @@ export const AddOrEditSchoolModal = () => {
   return (
     showDelete && (
       <div className="parent-dialog">
-        <div className="mx-[10vw] flex w-full max-w-[400px] flex-col rounded-lg bg-white p-6">
+        <div className="child-dialog">
           <button
             onClick={(e) => {
               e.preventDefault();

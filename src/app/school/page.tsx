@@ -11,10 +11,16 @@ const SchoolDetailPage = () => {
   return (
     <div className="h-full w-full overflow-hidden p-4">
       <div className="flex flex-row gap-2 overflow-x-auto">
-        <Link className="btn-outlined" href={`/school/student-list?id=${id}`}>
+        <Link
+          className="btn-outlined"
+          href={`/school/student-list?schoolId=${id}`}
+        >
           Daftar Murid
         </Link>
-        <Link className="btn-outlined" href={`/school/class-list?id=${id}`}>
+        <Link
+          className="btn-outlined"
+          href={`/school/class-list?schoolId=${id}`}
+        >
           Daftar Kelas
         </Link>
       </div>

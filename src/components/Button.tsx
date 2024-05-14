@@ -12,7 +12,6 @@ type ButtonProps = {
   className?: string;
   implementBreakPoints?: boolean;
   variant?: "outlined" | "full";
-  onButtonClick?: (e: React.MouseEvent) => void;
 } & ComponentProps<"button">;
 
 const IconFromName = ({ iconName }: { iconName: string }) => {
@@ -32,19 +31,17 @@ const Button = ({
   pending,
   implementBreakPoints = false,
   variant = "full",
-  onButtonClick,
   ...props
 }: ButtonProps) => {
   // const isBreakPointActive = useIsBreakpointActive("sm");
 
   return (
     <button
-      onClick={onButtonClick}
       className={twMerge(
-        "flex flex-row items-center justify-center gap-2 rounded-lg px-[16px] py-[10px] text-center text-white duration-150",
+        "flex flex-row items-center justify-center gap-2 rounded-lg px-[16px] py-[10px] text-center font-semibold text-white duration-150",
         variant === "full"
           ? "bg-[#E24955] hover:bg-[#c23b46]"
-          : "border-[1px] border-[#D0D5DD]",
+          : "border-[1px] border-[#D0D5DD] text-black hover:bg-slate-200",
         className,
       )}
       {...props}

@@ -5,16 +5,22 @@ import dbConnect from "@/lib/db/mongoose";
 import { IStudent, Student } from "@/lib/models/student";
 import { User } from "@/lib/models/user";
 import { revalidatePath } from "next/cache";
+import { RedirectType, redirect } from "next/navigation";
 
 const bcrypt = require("bcrypt");
 
-export async function addStudent(_: any, formData: FormData) {
+export async function addOrUpdateStudent(_: any, formData: FormData) {
   const fullName = formData.get("fullname")?.toString();
   const username = formData.get("username")?.toString();
   const password = formData.get("password")?.toString();
-  const schoolId = formData.get("school_id")?.toString();
+  const schoolId = formData.get("schoolId")?.toString();
   const studentClass = formData.get("class")?.toString();
   const subClass = formData.get("subclass")?.toString();
+  const isUpdate = formData.get("isUpdate")?.toString();
+  const id = formData.get("id")?.toString();
+  const lastUrl = formData.get("lastUrl")?.toString();
+
+  console.log(`lastUrl ${lastUrl}`);
 
   console.log(
     `${fullName}, ${username}, ${password}, ${schoolId}, ${studentClass}, ${subClass}`,
@@ -22,31 +28,48 @@ export async function addStudent(_: any, formData: FormData) {
 
   try {
     await dbConnect();
-    const _student = await Student.create({
-      school_id: schoolId,
-      full_name: fullName,
-      username: username,
-      kelas: studentClass,
-      sub_kelas: subClass,
-      password: password,
-    });
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    let _student;
+    let _user;
 
-    const _user = await User.create({
-      username: username,
-      password: hashedPassword,
-      level: RoleLevel.Student,
-    });
+    if (isUpdate) {
+      _student = await Student.findByIdAndUpdate(id, {
+        school_id: schoolId,
+        full_name: fullName,
+        username: username,
+        kelas: studentClass,
+        sub_kelas: subClass,
+        password: password,
+      });
+    } else {
+      _student = await Student.create({
+        school_id: schoolId,
+        full_name: fullName,
+        username: username,
+        kelas: studentClass,
+        sub_kelas: subClass,
+        password: password,
+      });
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      _user = await User.create({
+        username: username,
+        password: hashedPassword,
+        level: RoleLevel.Student,
+      });
+    }
 
     if (!_student || !_user) {
       return "Gagal mendaftarkan murid";
     }
 
-    revalidatePath("/student-list");
+    revalidatePath(lastUrl ?? "");
   } catch (error) {
     return `${error}`;
   }
+
+  redirect(lastUrl ?? "", RedirectType.replace);
 }
 
 export async function getStudents(schoolId: string) {
