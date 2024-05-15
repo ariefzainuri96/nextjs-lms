@@ -5,8 +5,11 @@ import { useFormState, useFormStatus } from "react-dom";
 import CustomInput from "@/components/CustomInput";
 import Button from "@/components/Button";
 import { addOrUpdateStudent } from "../actions";
+import { useState } from "react";
 
 export const AddOrEditStudentModal = () => {
+  const [showSubClass, setShowSubClass] = useState(false);
+
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -15,7 +18,6 @@ export const AddOrEditStudentModal = () => {
   const showAddOrEdit = searchParams.get("show-add-or-edit-student");
   const name = searchParams.get("name");
   const kelas = searchParams.get("class");
-  const showSubKelas = searchParams.get("showSubKelas");
   const subKelas = searchParams.get("subclass");
   const username = searchParams.get("username");
   const password = searchParams.get("password");
@@ -25,8 +27,6 @@ export const AddOrEditStudentModal = () => {
   const router = useRouter();
 
   const [message, dispatch] = useFormState(addOrUpdateStudent, undefined);
-
-  console.log(`lastUrl ${lastUrl}`);
 
   return (
     showAddOrEdit && (
@@ -57,22 +57,14 @@ export const AddOrEditStudentModal = () => {
               <p className="text-lg font-semibold">Subclass</p>
               <input
                 type="checkbox"
-                checked={Boolean(showSubKelas)}
+                checked={showSubClass}
                 onChange={(e) => {
-                  if (Boolean(e.target.checked)) {
-                    window.history.pushState(
-                      null,
-                      "",
-                      `${pathname}?${searchParams}&showSubKelas=true`,
-                    );
-                  } else {
-                    window.history.back();
-                  }
+                  setShowSubClass(Boolean(e.target.checked));
                 }}
                 className="checkbox"
               />
             </div>
-            {showSubKelas && (
+            {showSubClass && (
               <CustomInput
                 defaultValue={subKelas ?? ""}
                 label={"Subclass"}
@@ -121,10 +113,6 @@ export const AddOrEditStudentModal = () => {
                 className="flex-1"
                 onClick={(e) => {
                   e.preventDefault();
-
-                  if (showSubKelas) {
-                    router.back();
-                  }
 
                   router.back();
                 }}

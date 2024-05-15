@@ -20,8 +20,6 @@ export async function addOrUpdateStudent(_: any, formData: FormData) {
   const id = formData.get("id")?.toString();
   const lastUrl = formData.get("lastUrl")?.toString();
 
-  console.log(`lastUrl ${lastUrl}`);
-
   console.log(
     `${fullName}, ${username}, ${password}, ${schoolId}, ${studentClass}, ${subClass}`,
   );
@@ -62,6 +60,31 @@ export async function addOrUpdateStudent(_: any, formData: FormData) {
 
     if (!_student || !_user) {
       return "Gagal mendaftarkan murid";
+    }
+
+    revalidatePath(lastUrl ?? "");
+  } catch (error) {
+    return `${error}`;
+  }
+
+  redirect(lastUrl ?? "", RedirectType.replace);
+}
+
+export async function deleteStudent(_: any, formData: FormData) {
+  await dbConnect();
+
+  const studentId = formData.get("id")?.toString();
+  const lastUrl = formData.get("lastUrl")?.toString();
+
+  console.log(`lastUrl ${lastUrl}`);
+
+  try {
+    const _student = await Student.deleteOne({
+      _id: studentId,
+    });
+
+    if (!_student) {
+      return "Gagal menghapus siswa";
     }
 
     revalidatePath(lastUrl ?? "");

@@ -41,7 +41,7 @@ export default async function Home() {
       <Suspense fallback={"Loading..."}>
         <SchoolList />
       </Suspense>
-      <DeleteDataDialog formAction={deleteSchool} />
+      <DeleteDataDialog formAction={deleteSchool} lastUrl="/" />
       <AddOrEditSchoolModal />
     </div>
   );

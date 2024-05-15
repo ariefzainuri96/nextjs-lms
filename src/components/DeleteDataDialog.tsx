@@ -3,12 +3,14 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useFormState, useFormStatus } from "react-dom";
 import { IcWarning } from "./Icons";
+import Button from "./Button";
 
 type DeleteDataDialogProps = {
+  lastUrl: string;
   formAction: (prevState: any, formData: FormData) => void;
 };
 
-const DeleteDataDialog = ({ formAction }: DeleteDataDialogProps) => {
+const DeleteDataDialog = ({ formAction, lastUrl }: DeleteDataDialogProps) => {
   const searchParams = useSearchParams();
   const showDelete = searchParams.get("showdelete");
   const id = searchParams.get("id");
@@ -29,6 +31,7 @@ const DeleteDataDialog = ({ formAction }: DeleteDataDialogProps) => {
           </p>
           <form action={dispatch}>
             <input hidden={true} defaultValue={id ?? ""} name="id" />
+            <input hidden={true} defaultValue={lastUrl ?? ""} name="lastUrl" />
             <div className="mt-8 flex flex-row gap-3">
               <button
                 onClick={(e) => {
@@ -54,17 +57,16 @@ function DeleteForm() {
   const { pending } = useFormStatus();
 
   return (
-    <button
+    <Button
       disabled={pending}
-      aria-disabled={pending}
+      pending={pending}
       type="submit"
       className={
         "btn-filled-primary flex-1 " +
         (pending && "bg-slate-400 hover:bg-slate-400")
       }
-    >
-      Delete
-    </button>
+      content={"Delete"}
+    />
   );
 }
 

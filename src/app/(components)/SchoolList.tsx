@@ -20,8 +20,8 @@ const SchoolList = async () => {
     <div className="mt-2 grid grid-cols-3 gap-2">
       {schools.map((element, index) => {
         return (
-          <Link key={index} href={`/school?id=${element._id}`}>
-            <div className="btn-outlined flex flex-col items-start">
+          <Link key={index} href={`/school?schoolId=${element._id}`}>
+            <div className="btn-outlined flex flex-col items-start hover:bg-transparent">
               <p className="line-clamp-2 text-wrap">
                 {`${element.school_name}\n`}
               </p>
