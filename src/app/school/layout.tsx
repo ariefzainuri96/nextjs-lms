@@ -18,12 +18,14 @@ export default function SchoolLayout({
           <Link
             className="btn-outlined"
             href={`/school/student-list?schoolId=${id}`}
+            replace
           >
             Daftar Murid
           </Link>
           <Link
             className="btn-outlined"
             href={`/school/class-list?schoolId=${id}`}
+            replace
           >
             Daftar Kelas
           </Link>
