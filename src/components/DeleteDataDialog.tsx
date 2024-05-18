@@ -10,7 +10,10 @@ type DeleteDataDialogProps = {
   formAction: (prevState: any, formData: FormData) => void;
 };
 
-const DeleteDataDialog = ({ formAction, lastUrl }: DeleteDataDialogProps) => {
+export const DeleteDataDialog = ({
+  formAction,
+  lastUrl,
+}: DeleteDataDialogProps) => {
   const searchParams = useSearchParams();
   const showDelete = searchParams.get("showdelete");
   const id = searchParams.get("id");
@@ -37,7 +40,7 @@ const DeleteDataDialog = ({ formAction, lastUrl }: DeleteDataDialogProps) => {
                 onClick={(e) => {
                   e.preventDefault();
 
-                  router.back();
+                  router.replace(lastUrl);
                 }}
                 type="button"
                 className="btn-outlined flex-1"
@@ -69,5 +72,3 @@ function DeleteForm() {
     />
   );
 }
-
-export default DeleteDataDialog;

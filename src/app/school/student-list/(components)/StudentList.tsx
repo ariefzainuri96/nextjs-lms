@@ -22,12 +22,14 @@ const StudentList = async () => {
             <Link
               className="ic-bordered"
               href={`${headerUrl}&showdelete=true&id=${element._id}`}
+              replace
             >
               <IcTrash />
             </Link>
             <Link
               className="ic-bordered"
-              href={`${headerUrl}&show-add-or-edit-student=true`}
+              href={`${headerUrl}&show-add-or-edit-student=true&name=${element.full_name}&class=${element.kelas}&subclass=${element.sub_kelas}&username=${element.username}&password=${element.password}&studentId=${element._id}&schoolId=${element.school_id}`}
+              replace
             >
               <IcEdit width="21" height="21" />
             </Link>

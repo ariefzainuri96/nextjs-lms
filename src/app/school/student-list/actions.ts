@@ -17,11 +17,11 @@ export async function addOrUpdateStudent(_: any, formData: FormData) {
   const studentClass = formData.get("class")?.toString();
   const subClass = formData.get("subclass")?.toString();
   const isUpdate = formData.get("isUpdate")?.toString();
-  const id = formData.get("id")?.toString();
+  const id = formData.get("studentId")?.toString();
   const lastUrl = formData.get("lastUrl")?.toString();
 
   console.log(
-    `${fullName}, ${username}, ${password}, ${schoolId}, ${studentClass}, ${subClass}`,
+    `${Boolean(isUpdate)}, ${id}, ${fullName}, ${username}, ${password}, ${schoolId}, ${studentClass}, ${subClass}`,
   );
 
   try {
@@ -30,14 +30,11 @@ export async function addOrUpdateStudent(_: any, formData: FormData) {
     let _student;
     let _user;
 
-    if (isUpdate) {
+    if (Boolean(isUpdate)) {
       _student = await Student.findByIdAndUpdate(id, {
-        school_id: schoolId,
         full_name: fullName,
-        username: username,
         kelas: studentClass,
         sub_kelas: subClass,
-        password: password,
       });
     } else {
       _student = await Student.create({
@@ -58,7 +55,7 @@ export async function addOrUpdateStudent(_: any, formData: FormData) {
       });
     }
 
-    if (!_student || !_user) {
+    if (Boolean(isUpdate) ? !_student : !_student || !_user) {
       return "Gagal mendaftarkan murid";
     }
 
@@ -95,18 +92,17 @@ export async function deleteStudent(_: any, formData: FormData) {
   redirect(lastUrl ?? "", RedirectType.replace);
 }
 
-export async function getStudents(schoolId: string) {
+export async function getStudents(schoolId: string): Promise<IStudent[]> {
+  console.log(`schoolId ${schoolId}`);
+
   try {
     await dbConnect();
 
-    const students = await Student.where({
+    const students: IStudent[] = await Student.where({
       school_id: schoolId,
     });
 
-    return students.map((element) => {
-      const obj: IStudent = JSON.parse(JSON.stringify(element));
-      return obj;
-    });
+    return students;
   } catch (error) {
     console.log(error);
     return [];

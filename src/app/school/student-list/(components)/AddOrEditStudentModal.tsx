@@ -5,11 +5,14 @@ import { useFormState, useFormStatus } from "react-dom";
 import CustomInput from "@/components/CustomInput";
 import Button from "@/components/Button";
 import { addOrUpdateStudent } from "../actions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const AddOrEditStudentModal = () => {
   const [showSubClass, setShowSubClass] = useState(false);
 
+  const [message, dispatch] = useFormState(addOrUpdateStudent, undefined);
+
+  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -24,9 +27,9 @@ export const AddOrEditStudentModal = () => {
   const studentId = searchParams.get("studentId");
   const schoolId = searchParams.get("schoolId");
 
-  const router = useRouter();
-
-  const [message, dispatch] = useFormState(addOrUpdateStudent, undefined);
+  useEffect(() => {
+    setShowSubClass(subKelas != null);
+  }, [subKelas]);
 
   return (
     showAddOrEdit && (
@@ -42,13 +45,11 @@ export const AddOrEditStudentModal = () => {
             />
             <div className="mt-2 flex w-full flex-row items-center gap-2">
               <select
-                defaultValue={kelas === null ? undefined : kelas}
+                defaultValue={kelas ?? "Class"}
                 name="class"
                 className="select select-bordered w-full flex-1"
               >
-                <option disabled selected>
-                  Class
-                </option>
+                <option disabled>Class</option>
                 {[1, 2, 3, 4, 5, 6].map((element) => {
                   return <option key={element}>{element}</option>;
                 })}
@@ -74,31 +75,41 @@ export const AddOrEditStudentModal = () => {
             )}
             <CustomInput
               defaultValue={username ?? ""}
+              readOnly={username != null}
               label={"Username"}
               name="username"
               className="mt-2"
-              disabled={studentId !== null}
             />
             <CustomInput
               defaultValue={password ?? ""}
               message={message}
+              readOnly={password != null}
               label={"Password"}
               name="password"
               className="mt-2"
-              disabled={studentId !== null}
             />
             <CustomInput
               hidden={true}
               label={""}
               name="schoolId"
               value={schoolId ?? ""}
+              readOnly
+              className="mt-2"
+            />
+            <CustomInput
+              hidden={true}
+              label={""}
+              name="studentId"
+              value={studentId ?? ""}
+              readOnly
               className="mt-2"
             />
             <CustomInput
               hidden={true}
               label={""}
               name="isUpdate"
-              value={name !== null ? "isUpdate" : ""}
+              readOnly
+              value={name != null ? "true" : "false"}
               className="mt-2"
             />
             <CustomInput
@@ -106,6 +117,7 @@ export const AddOrEditStudentModal = () => {
               label={""}
               name="lastUrl"
               value={lastUrl}
+              readOnly
               className="mt-2"
             />
             <div className="mt-4 flex w-full flex-row gap-2">
@@ -114,12 +126,12 @@ export const AddOrEditStudentModal = () => {
                 onClick={(e) => {
                   e.preventDefault();
 
-                  router.back();
+                  router.replace(lastUrl);
                 }}
                 content={"Cancel"}
                 variant="outlined"
               />
-              <ButtonAdd />
+              <ButtonAdd content={username} />
             </div>
           </form>
         </div>
@@ -128,7 +140,7 @@ export const AddOrEditStudentModal = () => {
   );
 };
 
-function ButtonAdd({ content }: { content?: string }) {
+function ButtonAdd({ content }: { content: string | null }) {
   const { pending } = useFormStatus();
 
   return (

@@ -1,24 +1,25 @@
 import React, { Suspense } from "react";
 import StudentList from "./(components)/StudentList";
 import { AddOrEditStudentModal } from "./(components)/AddOrEditStudentModal";
-import DeleteDataDialog from "@/components/DeleteDataDialog";
 import { deleteStudent } from "./actions";
 import { headers } from "next/headers";
 import Link from "next/link";
+import { DeleteDataDialog } from "@/components/DeleteDataDialog";
 
 const StudentListPage = () => {
   const headersList = headers();
-  const header_url = headersList.get("x-url") || "";
+  const headerUrl = headersList.get("x-url") || "";
   const pathname = headersList.get("x-pathname") || "";
   const origin = headersList.get("x-origin") || "";
-  const params = new URL(header_url).searchParams;
+  const params = new URL(headerUrl).searchParams;
 
   return (
     <div className="flex h-full w-full flex-col overflow-hidden">
       <div className="mt-4 flex flex-row overflow-x-auto px-4">
         <Link
-          href={`${header_url}&show-add-or-edit-student=true`}
+          href={`${headerUrl}&show-add-or-edit-student=true`}
           className="btn"
+          replace
         >
           Tambah Murid
         </Link>

@@ -41,23 +41,24 @@ export const AddOrEditSchoolModal = () => {
             />
             <input
               name="isUpdate"
-              value={content === null ? undefined : content}
+              value={content == null ? undefined : content}
               hidden={true}
+              readOnly
             />
-            <input name="schoolId" value={id ?? ""} hidden={true} />
+            <input name="schoolId" value={id ?? ""} hidden={true} readOnly />
             <div className="mt-4 flex flex-row gap-2">
               <button
                 onClick={(e) => {
                   e.preventDefault();
 
-                  router.back();
+                  router.replace("/");
                 }}
                 type="button"
                 className="btn-outlined flex-1"
               >
                 Cancel
               </button>
-              <ButtonTambah content={content === null ? undefined : content} />
+              <ButtonTambah content={content == null ? undefined : content} />
             </div>
           </form>
         </div>
