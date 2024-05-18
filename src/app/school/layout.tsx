@@ -30,7 +30,7 @@ export default function SchoolLayout({
             Daftar Kelas
           </Link>
         </div>
-        <main className="flex-1 bg-white">{children}</main>
+        <main className="w-full flex-1 bg-white">{children}</main>
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import { deleteStudent } from "./actions";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { DeleteDataDialog } from "@/components/DeleteDataDialog";
+import LoadingPage from "@/components/LoadingPage";
 
 const StudentListPage = () => {
   const headersList = headers();
@@ -26,7 +27,7 @@ const StudentListPage = () => {
       </div>
       <div className="mt-4 h-[1px] w-full bg-slate-200" />
       <div className="flex flex-1 flex-col overflow-y-auto px-4">
-        <Suspense fallback="Loading...">
+        <Suspense fallback={<LoadingPage />}>
           <StudentList />
         </Suspense>
       </div>
