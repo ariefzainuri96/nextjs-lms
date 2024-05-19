@@ -4,9 +4,8 @@ import { RoleLevel } from "@/lib/common_enum";
 import dbConnect from "@/lib/db/mongoose";
 import { IStudent, Student } from "@/lib/models/student";
 import { User } from "@/lib/models/user";
-import { delay } from "@/lib/utils/common_functions";
 import { randomUUID } from "crypto";
-import { revalidatePath, unstable_cache } from "next/cache";
+import { revalidatePath } from "next/cache";
 
 const bcrypt = require("bcrypt");
 

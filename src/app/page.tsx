@@ -1,25 +1,24 @@
 import { validateRequest } from "@/lib/auth/lucia";
 import dbConnect from "@/lib/db/mongoose";
 import { redirect } from "next/navigation";
-import { deleteSchool, logout } from "./actions";
+import { logout } from "./actions";
 import { Suspense } from "react";
 import SchoolList from "./(components)/SchoolList";
 import { IUser, User } from "@/lib/models/user";
 import { RoleLevel } from "@/lib/common_enum";
 import { AddOrEditSchoolModal } from "./(components)/AddOrEditSchoolModal";
-import { DeleteDataDialog } from "@/components/DeleteDataDialog";
 import ButtonModalAction from "@/components/ButtonModalAction";
 import { Modal } from "@/lib/strings";
 import SchoolListSkeleton from "./(components)/SchoolListSkeleton";
 
 export default async function Home() {
-  await dbConnect();
-
   const { user } = await validateRequest();
 
   if (!user) {
-    redirect("/register");
+    redirect("/login");
   }
+
+  await dbConnect();
 
   const profile: IUser | null = await User.findOne({
     username: user.username,

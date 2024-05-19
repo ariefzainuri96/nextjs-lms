@@ -1,11 +1,19 @@
+import { validateRequest } from "@/lib/auth/lucia";
 import { headers } from "next/headers";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-export default function SchoolLayout({
+export default async function SchoolLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { user } = await validateRequest();
+
+  if (!user) {
+    redirect("/login");
+  }
+
   const headersList = headers();
   const header_url = headersList.get("x-url") || "";
   const params = new URL(header_url).searchParams;
