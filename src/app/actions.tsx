@@ -7,6 +7,7 @@ import { ISchool, School } from "@/lib/models/school";
 import { revalidatePath, unstable_cache } from "next/cache";
 import dbConnect from "@/lib/db/mongoose";
 import { randomUUID } from "crypto";
+import { z } from "zod";
 
 export async function logout(_: FormData) {
   await dbConnect();
@@ -35,6 +36,27 @@ export async function addOrUpdateSchool(_: any, formData: FormData) {
 
   const name = formData.get("school_name")?.toString();
   const schoolId = formData.get("schoolId")?.toString();
+
+  const addSchoolSchema = z.object({
+    name: z.string().min(1, {
+      message: "Nama sekolah tidak boleh kosong!",
+    }),
+  });
+
+  const passValidation = addSchoolSchema.safeParse({
+    name: name,
+  });
+
+  if (!passValidation.success) {
+    const { errors: err } = passValidation.error;
+
+    let stringErr = "";
+    err.forEach((element) => {
+      stringErr += `${element.message} - `;
+    });
+
+    return `${stringErr.slice(0, -2)} [??] ${randomUUID()}`;
+  }
 
   try {
     var content;
