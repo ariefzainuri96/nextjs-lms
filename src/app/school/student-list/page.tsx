@@ -4,6 +4,7 @@ import LoadingPage from "@/components/LoadingPage";
 import ButtonModalAction from "@/components/ButtonModalAction";
 import { Modal } from "@/lib/strings";
 import { AddOrEditStudentModal } from "./(components)/AddOrEditStudentModal";
+import StudentListSkeleton from "./(components)/StudentListSkeleton";
 
 const StudentListPage = () => {
   return (
@@ -15,7 +16,7 @@ const StudentListPage = () => {
       </div>
       <div className="mt-4 h-[1px] w-full bg-slate-200" />
       <div className="flex flex-1 flex-col overflow-y-auto px-4">
-        <Suspense fallback={<LoadingPage />}>
+        <Suspense fallback={<StudentListSkeleton />}>
           <StudentList />
         </Suspense>
       </div>

@@ -10,6 +10,7 @@ import { AddOrEditSchoolModal } from "./(components)/AddOrEditSchoolModal";
 import { DeleteDataDialog } from "@/components/DeleteDataDialog";
 import ButtonModalAction from "@/components/ButtonModalAction";
 import { Modal } from "@/lib/strings";
+import SchoolListSkeleton from "./(components)/SchoolListSkeleton";
 
 export default async function Home() {
   await dbConnect();
@@ -44,7 +45,7 @@ export default async function Home() {
         </form>
       </div>
       <p className="mt-2">Daftar Sekolah</p>
-      <Suspense fallback={"Loading..."}>
+      <Suspense fallback={<SchoolListSkeleton />}>
         <SchoolList />
       </Suspense>
     </div>
