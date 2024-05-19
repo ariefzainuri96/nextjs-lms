@@ -1,29 +1,17 @@
 import React, { Suspense } from "react";
 import StudentList from "./(components)/StudentList";
-import { AddOrEditStudentModal } from "./(components)/AddOrEditStudentModal";
-import { deleteStudent } from "./actions";
-import { headers } from "next/headers";
-import Link from "next/link";
-import { DeleteDataDialog } from "@/components/DeleteDataDialog";
 import LoadingPage from "@/components/LoadingPage";
+import ButtonModalAction from "@/components/ButtonModalAction";
+import { Modal } from "@/lib/strings";
+import { AddOrEditStudentModal } from "./(components)/AddOrEditStudentModal";
 
 const StudentListPage = () => {
-  const headersList = headers();
-  const headerUrl = headersList.get("x-url") || "";
-  const pathname = headersList.get("x-pathname") || "";
-  const origin = headersList.get("x-origin") || "";
-  const params = new URL(headerUrl).searchParams;
-
   return (
     <div className="flex h-full w-full flex-col overflow-hidden">
       <div className="mt-4 flex flex-row overflow-x-auto px-4">
-        <Link
-          href={`${headerUrl}&show-add-or-edit-student=true`}
-          className="btn"
-          replace
-        >
+        <ButtonModalAction modalId={Modal.AddStudent} className="btn">
           Tambah Murid
-        </Link>
+        </ButtonModalAction>
       </div>
       <div className="mt-4 h-[1px] w-full bg-slate-200" />
       <div className="flex flex-1 flex-col overflow-y-auto px-4">
@@ -31,11 +19,7 @@ const StudentListPage = () => {
           <StudentList />
         </Suspense>
       </div>
-      <AddOrEditStudentModal />
-      <DeleteDataDialog
-        formAction={deleteStudent}
-        lastUrl={`${pathname}?schoolId=${params.get("schoolId")}`}
-      />
+      <AddOrEditStudentModal modalId={Modal.AddStudent} />
     </div>
   );
 };

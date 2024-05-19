@@ -5,7 +5,6 @@ import dbConnect from "@/lib/db/mongoose";
 import { IStudent, Student } from "@/lib/models/student";
 import { User } from "@/lib/models/user";
 import { revalidatePath } from "next/cache";
-import { RedirectType, redirect } from "next/navigation";
 
 const bcrypt = require("bcrypt");
 
@@ -16,13 +15,8 @@ export async function addOrUpdateStudent(_: any, formData: FormData) {
   const schoolId = formData.get("schoolId")?.toString();
   const studentClass = formData.get("class")?.toString();
   const subClass = formData.get("subclass")?.toString();
-  const isUpdate = formData.get("isUpdate")?.toString();
-  const id = formData.get("studentId")?.toString();
+  const id = formData.get("studentId");
   const lastUrl = formData.get("lastUrl")?.toString();
-
-  console.log(
-    `${Boolean(isUpdate)}, ${id}, ${fullName}, ${username}, ${password}, ${schoolId}, ${studentClass}, ${subClass}`,
-  );
 
   try {
     await dbConnect();
@@ -30,7 +24,7 @@ export async function addOrUpdateStudent(_: any, formData: FormData) {
     let _student;
     let _user;
 
-    if (Boolean(isUpdate)) {
+    if (id) {
       _student = await Student.findByIdAndUpdate(id, {
         full_name: fullName,
         kelas: studentClass,
@@ -55,16 +49,16 @@ export async function addOrUpdateStudent(_: any, formData: FormData) {
       });
     }
 
-    if (Boolean(isUpdate) ? !_student : !_student || !_user) {
+    if (id ? !_student : !_student || !_user) {
       return "Gagal mendaftarkan murid";
     }
 
     revalidatePath(lastUrl ?? "");
+
+    return "success";
   } catch (error) {
     return `${error}`;
   }
-
-  redirect(lastUrl ?? "", RedirectType.replace);
 }
 
 export async function deleteStudent(_: any, formData: FormData) {
@@ -72,8 +66,6 @@ export async function deleteStudent(_: any, formData: FormData) {
 
   const studentId = formData.get("id")?.toString();
   const lastUrl = formData.get("lastUrl")?.toString();
-
-  console.log(`lastUrl ${lastUrl}`);
 
   try {
     const _student = await Student.deleteOne({
@@ -85,11 +77,10 @@ export async function deleteStudent(_: any, formData: FormData) {
     }
 
     revalidatePath(lastUrl ?? "");
+    return "success";
   } catch (error) {
     return `${error}`;
   }
-
-  redirect(lastUrl ?? "", RedirectType.replace);
 }
 
 export async function getStudents(schoolId: string): Promise<IStudent[]> {

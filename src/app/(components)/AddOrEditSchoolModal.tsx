@@ -1,69 +1,65 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
 import { useFormState, useFormStatus } from "react-dom";
 import { addOrUpdateSchool } from "../actions";
 import CustomInput from "@/components/CustomInput";
 import Button from "@/components/Button";
 
-export const AddOrEditSchoolModal = () => {
-  const searchParams = useSearchParams();
-  const showDelete = searchParams.get("showaddoredit");
-  const id = searchParams.get("id");
-  const content = searchParams.get("content");
+type AddOrEditSchoolModalProps = {
+  modalId: string;
+  content?: string;
+  schoolId?: string;
+};
 
-  const router = useRouter();
-
+export const AddOrEditSchoolModal = ({
+  modalId,
+  content,
+  schoolId,
+}: AddOrEditSchoolModalProps) => {
   const [message, dispatch] = useFormState(addOrUpdateSchool, undefined);
 
-  return (
-    showDelete && (
-      <div className="parent-dialog">
-        <div className="child-dialog">
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-            }}
-            className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2"
-          >
-            ✕
-          </button>
-          <h3 className="mt-2 text-lg font-bold">
-            {content ? "Perbarui Sekolah" : "Tambah Sekolah"}
-          </h3>
-          <form action={dispatch}>
-            <CustomInput
-              defaultValue={content ?? ""}
-              label={"Nama Sekolah"}
-              name="school_name"
-              className="mt-4"
-              message={message}
-            />
-            <input
-              name="isUpdate"
-              value={content == null ? undefined : content}
-              hidden={true}
-              readOnly
-            />
-            <input name="schoolId" value={id ?? ""} hidden={true} readOnly />
-            <div className="mt-4 flex flex-row gap-2">
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
+  // close modal after get success message
+  if (message && message == "success" && typeof document != "undefined") {
+    (document.getElementById(modalId) as HTMLFormElement).close();
+  }
 
-                  router.replace("/");
-                }}
-                type="button"
-                className="btn-outlined flex-1"
-              >
-                Cancel
-              </button>
-              <ButtonTambah content={content == null ? undefined : content} />
-            </div>
-          </form>
-        </div>
+  return (
+    <dialog id={modalId} className="modal">
+      <div className="modal-box">
+        <h3 className="mt-2 text-lg font-bold">
+          {content ? "Perbarui Sekolah" : "Tambah Sekolah"}
+        </h3>
+        <form action={dispatch}>
+          <CustomInput
+            defaultValue={content ?? ""}
+            label={"Nama Sekolah"}
+            name="school_name"
+            className="mt-4"
+            message={message}
+          />
+          <input
+            name="schoolId"
+            value={schoolId ?? ""}
+            hidden={true}
+            readOnly
+          />
+          <div className="mt-4 flex flex-row gap-2">
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+
+                (document.getElementById(modalId) as HTMLFormElement).close();
+              }}
+              type="button"
+              className="btn-outlined flex-1"
+            >
+              Cancel
+            </button>
+            <ButtonTambah content={content == null ? undefined : content} />
+          </div>
+        </form>
       </div>
-    )
+    </dialog>
   );
 };
 

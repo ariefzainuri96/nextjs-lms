@@ -2,7 +2,7 @@
 
 import { lucia, validateRequest } from "@/lib/auth/lucia";
 import { cookies } from "next/headers";
-import { RedirectType, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import { School } from "@/lib/models/school";
 import { revalidatePath } from "next/cache";
 import dbConnect from "@/lib/db/mongoose";
@@ -33,7 +33,6 @@ export async function addOrUpdateSchool(_: any, formData: FormData) {
   const { user } = await validateRequest();
 
   const name = formData.get("school_name")?.toString();
-  const isUpdate = formData.get("isUpdate")?.toString();
   const schoolId = formData.get("schoolId")?.toString();
 
   console.log(`schoolId => ${schoolId}`);
@@ -41,7 +40,7 @@ export async function addOrUpdateSchool(_: any, formData: FormData) {
   try {
     var content;
 
-    if (isUpdate) {
+    if (schoolId) {
       content = await School.findByIdAndUpdate(schoolId, {
         school_name: name,
       });
@@ -57,12 +56,12 @@ export async function addOrUpdateSchool(_: any, formData: FormData) {
     }
 
     revalidatePath("/");
+
+    return "success";
   } catch (error) {
     console.log(error);
     return `${error}`;
   }
-
-  redirect("/");
 }
 
 export async function deleteSchool(_: any, formData: FormData) {
@@ -82,9 +81,9 @@ export async function deleteSchool(_: any, formData: FormData) {
     }
 
     revalidatePath("/");
+
+    return "success";
   } catch (error) {
     return `${error}`;
   }
-
-  redirect("/", RedirectType.replace);
 }

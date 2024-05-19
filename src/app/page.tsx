@@ -8,7 +8,8 @@ import { IUser, User } from "@/lib/models/user";
 import { RoleLevel } from "@/lib/common_enum";
 import { AddOrEditSchoolModal } from "./(components)/AddOrEditSchoolModal";
 import { DeleteDataDialog } from "@/components/DeleteDataDialog";
-import Link from "next/link";
+import ButtonModalAction from "@/components/ButtonModalAction";
+import { Modal } from "@/lib/strings";
 
 export default async function Home() {
   await dbConnect();
@@ -30,9 +31,12 @@ export default async function Home() {
   return (
     <div className="mx-4 flex flex-col items-start">
       <div className="mt-2 flex flex-row gap-2 overflow-y-auto">
-        <Link href={"?showaddoredit=true"} className="btn" replace>
-          Tambah Sekolah
-        </Link>
+        <>
+          <ButtonModalAction className="btn-outlined" modalId={Modal.AddSchool}>
+            Tambah Sekolah
+          </ButtonModalAction>
+          <AddOrEditSchoolModal modalId={Modal.AddSchool} />
+        </>
         <form action={logout}>
           <button className="btn-outlined" type="submit">
             Logout
@@ -43,8 +47,6 @@ export default async function Home() {
       <Suspense fallback={"Loading..."}>
         <SchoolList />
       </Suspense>
-      <DeleteDataDialog formAction={deleteSchool} lastUrl="/" />
-      <AddOrEditSchoolModal />
     </div>
   );
 }

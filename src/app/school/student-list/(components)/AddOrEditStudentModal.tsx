@@ -1,146 +1,142 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useFormState, useFormStatus } from "react-dom";
 import CustomInput from "@/components/CustomInput";
 import Button from "@/components/Button";
 import { addOrUpdateStudent } from "../actions";
 import { useEffect, useState } from "react";
+import { IStudent } from "@/lib/models/student";
 
-export const AddOrEditStudentModal = () => {
+type AddOrEditStudentModalProps = {
+  modalId: string;
+  student?: IStudent;
+};
+
+export const AddOrEditStudentModal = ({
+  modalId,
+  student,
+}: AddOrEditStudentModalProps) => {
   const [showSubClass, setShowSubClass] = useState(false);
-
   const [message, dispatch] = useFormState(addOrUpdateStudent, undefined);
-
-  const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const params = useSearchParams();
 
-  const lastUrl = `${pathname}?schoolId=${searchParams.get("schoolId")}`;
+  const schoolId = params.get("schoolId");
 
-  const showAddOrEdit = searchParams.get("show-add-or-edit-student");
-  const name = searchParams.get("name");
-  const kelas = searchParams.get("class");
-  const subKelas = searchParams.get("subclass");
-  const username = searchParams.get("username");
-  const password = searchParams.get("password");
-  const studentId = searchParams.get("studentId");
-  const schoolId = searchParams.get("schoolId");
+  const lastUrl = `${pathname}?schoolId=${schoolId}`;
 
   useEffect(() => {
-    setShowSubClass(subKelas != null);
-  }, [subKelas]);
+    setShowSubClass(student?.sub_kelas != undefined);
+  }, [student?.sub_kelas]);
+
+  // close modal after get success message
+  if (message && message == "success" && typeof document != "undefined") {
+    (document.getElementById(modalId) as HTMLFormElement).close();
+  }
 
   return (
-    showAddOrEdit && (
-      <div className="parent-dialog">
-        <div className="child-dialog">
-          <h3 className="mt-2 text-lg font-bold">Tambah Murid!</h3>
-          <form action={dispatch}>
-            <CustomInput
-              defaultValue={name ?? ""}
-              label={"Nama Lengkap"}
-              name="fullname"
-              className="mt-4"
+    <dialog id={modalId} className="modal">
+      <div className="modal-box">
+        <h3 className="mt-2 text-lg font-bold">Tambah Murid!</h3>
+        <form action={dispatch}>
+          <CustomInput
+            defaultValue={student?.full_name ?? ""}
+            label={"Nama Lengkap"}
+            name="fullname"
+            className="mt-4"
+          />
+          <div className="mt-2 flex w-full flex-row items-center gap-2">
+            <select
+              defaultValue={student?.kelas ?? "Class"}
+              name="class"
+              className="select select-bordered w-full flex-1"
+            >
+              <option disabled>Class</option>
+              {[1, 2, 3, 4, 5, 6].map((element) => {
+                return <option key={element}>{element}</option>;
+              })}
+            </select>
+            <div className="h-10 w-[1px] bg-slate-200" />
+            <p className="text-lg font-semibold">Subclass</p>
+            <input
+              type="checkbox"
+              checked={showSubClass}
+              onChange={(e) => {
+                setShowSubClass(Boolean(e.target.checked));
+              }}
+              className="checkbox"
             />
-            <div className="mt-2 flex w-full flex-row items-center gap-2">
-              <select
-                defaultValue={kelas ?? "Class"}
-                name="class"
-                className="select select-bordered w-full flex-1"
-              >
-                <option disabled>Class</option>
-                {[1, 2, 3, 4, 5, 6].map((element) => {
-                  return <option key={element}>{element}</option>;
-                })}
-              </select>
-              <div className="h-10 w-[1px] bg-slate-200" />
-              <p className="text-lg font-semibold">Subclass</p>
-              <input
-                type="checkbox"
-                checked={showSubClass}
-                onChange={(e) => {
-                  setShowSubClass(Boolean(e.target.checked));
-                }}
-                className="checkbox"
-              />
-            </div>
-            {showSubClass && (
-              <CustomInput
-                defaultValue={subKelas ?? ""}
-                label={"Subclass"}
-                name="subclass"
-                className="mt-2"
-              />
-            )}
+          </div>
+          {showSubClass && (
             <CustomInput
-              defaultValue={username ?? ""}
-              readOnly={username != null}
-              label={"Username"}
-              name="username"
+              defaultValue={student?.sub_kelas ?? ""}
+              label={"Subclass"}
+              name="subclass"
               className="mt-2"
             />
-            <CustomInput
-              defaultValue={password ?? ""}
-              message={message}
-              readOnly={password != null}
-              label={"Password"}
-              name="password"
-              className="mt-2"
-            />
-            <CustomInput
-              hidden={true}
-              label={""}
-              name="schoolId"
-              value={schoolId ?? ""}
-              readOnly
-              className="mt-2"
-            />
-            <CustomInput
-              hidden={true}
-              label={""}
-              name="studentId"
-              value={studentId ?? ""}
-              readOnly
-              className="mt-2"
-            />
-            <CustomInput
-              hidden={true}
-              label={""}
-              name="isUpdate"
-              readOnly
-              value={name != null ? "true" : "false"}
-              className="mt-2"
-            />
-            <CustomInput
-              hidden={true}
-              label={""}
-              name="lastUrl"
-              value={lastUrl}
-              readOnly
-              className="mt-2"
-            />
-            <div className="mt-4 flex w-full flex-row gap-2">
-              <Button
-                className="flex-1"
-                onClick={(e) => {
-                  e.preventDefault();
+          )}
+          <CustomInput
+            defaultValue={student?.username ?? ""}
+            readOnly={student?.username != undefined}
+            disabled={student?.username != undefined}
+            label={"Username"}
+            name="username"
+            className="mt-2"
+          />
+          <CustomInput
+            defaultValue={student?.password ?? ""}
+            message={message}
+            readOnly={student?.password != undefined}
+            disabled={student?.password != undefined}
+            label={"Password"}
+            name="password"
+            className="mt-2"
+          />
+          <CustomInput
+            hidden={true}
+            label={""}
+            name="schoolId"
+            value={schoolId ?? ""}
+            readOnly
+            className="mt-2"
+          />
+          <CustomInput
+            hidden={true}
+            label={""}
+            name="studentId"
+            value={student?._id}
+            readOnly
+            className="mt-2"
+          />
+          <CustomInput
+            hidden={true}
+            label={""}
+            name="lastUrl"
+            value={lastUrl}
+            readOnly
+            className="mt-2"
+          />
+          <div className="mt-4 flex w-full flex-row gap-2">
+            <Button
+              className="flex-1"
+              onClick={(e) => {
+                e.preventDefault();
 
-                  router.replace(lastUrl);
-                }}
-                content={"Cancel"}
-                variant="outlined"
-              />
-              <ButtonAdd content={username} />
-            </div>
-          </form>
-        </div>
+                (document.getElementById(modalId) as HTMLFormElement).close();
+              }}
+              content={"Cancel"}
+              variant="outlined"
+            />
+            <ButtonAdd isUpdate={student?._id} />
+          </div>
+        </form>
       </div>
-    )
+    </dialog>
   );
 };
 
-function ButtonAdd({ content }: { content: string | null }) {
+function ButtonAdd({ isUpdate }: { isUpdate?: string }) {
   const { pending } = useFormStatus();
 
   return (
@@ -152,7 +148,7 @@ function ButtonAdd({ content }: { content: string | null }) {
         "btn-filled-primary flex-1 " +
         (pending ? "bg-slate-400 hover:bg-slate-400" : "")
       }
-      content={content ? "Perbarui" : "Tambah"}
+      content={isUpdate ? "Perbarui" : "Tambah"}
     />
   );
 }
