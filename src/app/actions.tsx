@@ -6,8 +6,9 @@ import { redirect } from "next/navigation";
 import { School } from "@/lib/models/school";
 import { revalidatePath } from "next/cache";
 import dbConnect from "@/lib/db/mongoose";
+import { randomUUID } from "crypto";
 
-export async function logout(formData: FormData) {
+export async function logout(_: FormData) {
   await dbConnect();
 
   const { session } = await validateRequest();
@@ -35,8 +36,6 @@ export async function addOrUpdateSchool(_: any, formData: FormData) {
   const name = formData.get("school_name")?.toString();
   const schoolId = formData.get("schoolId")?.toString();
 
-  console.log(`schoolId => ${schoolId}`);
-
   try {
     var content;
 
@@ -52,15 +51,15 @@ export async function addOrUpdateSchool(_: any, formData: FormData) {
     }
 
     if (!content) {
-      return "Gagal membuat sekolah";
+      return `Gagal membuat sekolah [??] ${randomUUID()}`;
     }
 
     revalidatePath("/");
 
     return "success";
   } catch (error) {
-    console.log(error);
-    return `${error}`;
+    console.log(`addOrUpdateSchoolError ${error}`);
+    return `${error} [??] ${randomUUID()}`;
   }
 }
 

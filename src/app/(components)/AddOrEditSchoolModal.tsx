@@ -4,6 +4,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import { addOrUpdateSchool } from "../actions";
 import CustomInput from "@/components/CustomInput";
 import Button from "@/components/Button";
+import { useEffect, useState } from "react";
 
 type AddOrEditSchoolModalProps = {
   modalId: string;
@@ -16,7 +17,25 @@ export const AddOrEditSchoolModal = ({
   content,
   schoolId,
 }: AddOrEditSchoolModalProps) => {
+  const [showError, setShowError] = useState(true);
   const [message, dispatch] = useFormState(addOrUpdateSchool, undefined);
+
+  useEffect(() => {
+    if (message) {
+      setShowError(message != "success");
+    }
+
+    const handleEsc = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setShowError(false);
+      }
+    };
+    window.addEventListener("keydown", handleEsc);
+
+    return () => {
+      window.removeEventListener("keydown", handleEsc);
+    };
+  }, [message]);
 
   // close modal after get success message
   if (message && message == "success" && typeof document != "undefined") {
@@ -26,7 +45,7 @@ export const AddOrEditSchoolModal = ({
   return (
     <dialog id={modalId} className="modal">
       <div className="modal-box">
-        <h3 className="mt-2 text-lg font-bold">
+        <h3 className="text-lg font-bold">
           {content ? "Perbarui Sekolah" : "Tambah Sekolah"}
         </h3>
         <form action={dispatch}>
@@ -35,7 +54,7 @@ export const AddOrEditSchoolModal = ({
             label={"Nama Sekolah"}
             name="school_name"
             className="mt-4"
-            message={message}
+            message={showError ? message?.split(" [??] ")[0] : undefined}
           />
           <input
             name="schoolId"
@@ -48,6 +67,7 @@ export const AddOrEditSchoolModal = ({
               onClick={(e) => {
                 e.preventDefault();
 
+                setShowError(false);
                 (document.getElementById(modalId) as HTMLFormElement).close();
               }}
               type="button"

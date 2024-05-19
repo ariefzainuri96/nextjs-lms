@@ -5,6 +5,7 @@ import dbConnect from "@/lib/db/mongoose";
 import { IStudent, Student } from "@/lib/models/student";
 import { User } from "@/lib/models/user";
 import { delay } from "@/lib/utils/common_functions";
+import { randomUUID } from "crypto";
 import { revalidatePath } from "next/cache";
 
 const bcrypt = require("bcrypt");
@@ -51,14 +52,14 @@ export async function addOrUpdateStudent(_: any, formData: FormData) {
     }
 
     if (id ? !_student : !_student || !_user) {
-      return "Gagal mendaftarkan murid";
+      return `Gagal mendaftarkan murid [??] ${randomUUID()}`;
     }
 
     revalidatePath(lastUrl ?? "");
 
     return "success";
   } catch (error) {
-    return `${error}`;
+    return `${error} [??] ${randomUUID()}`;
   }
 }
 

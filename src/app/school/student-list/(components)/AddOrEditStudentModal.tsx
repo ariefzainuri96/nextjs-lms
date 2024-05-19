@@ -17,6 +17,7 @@ export const AddOrEditStudentModal = ({
   modalId,
   student,
 }: AddOrEditStudentModalProps) => {
+  const [showError, setShowError] = useState(true);
   const [showSubClass, setShowSubClass] = useState(false);
   const [message, dispatch] = useFormState(addOrUpdateStudent, undefined);
   const pathname = usePathname();
@@ -27,8 +28,23 @@ export const AddOrEditStudentModal = ({
   const lastUrl = `${pathname}?schoolId=${schoolId}`;
 
   useEffect(() => {
+    if (message) {
+      setShowError(message != "success");
+    }
+
     setShowSubClass(student?.sub_kelas != undefined);
-  }, [student?.sub_kelas]);
+
+    const handleEsc = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setShowError(false);
+      }
+    };
+    window.addEventListener("keydown", handleEsc);
+
+    return () => {
+      window.removeEventListener("keydown", handleEsc);
+    };
+  }, [student?.sub_kelas, message]);
 
   // close modal after get success message
   if (message && message == "success" && typeof document != "undefined") {
@@ -38,7 +54,7 @@ export const AddOrEditStudentModal = ({
   return (
     <dialog id={modalId} className="modal">
       <div className="modal-box">
-        <h3 className="mt-2 text-lg font-bold">Tambah Murid!</h3>
+        <h3 className="text-lg font-bold">Tambah Murid!</h3>
         <form action={dispatch}>
           <CustomInput
             defaultValue={student?.full_name ?? ""}
@@ -86,7 +102,7 @@ export const AddOrEditStudentModal = ({
           />
           <CustomInput
             defaultValue={student?.password ?? ""}
-            message={message}
+            message={showError ? message?.split(" [??] ")[0] : undefined}
             readOnly={student?.password != undefined}
             disabled={student?.password != undefined}
             label={"Password"}
@@ -123,6 +139,7 @@ export const AddOrEditStudentModal = ({
               onClick={(e) => {
                 e.preventDefault();
 
+                setShowError(false);
                 (document.getElementById(modalId) as HTMLFormElement).close();
               }}
               content={"Cancel"}

@@ -15,7 +15,7 @@ export const SchoolSchema = new mongoose.Schema<ISchool>({
   },
   school_name: {
     type: String,
-    required: true,
+    required: [true, "Nama sekolah wajib diisi!"],
   },
   created_at: {
     type: Date,

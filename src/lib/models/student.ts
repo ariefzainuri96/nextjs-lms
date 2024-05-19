@@ -19,22 +19,22 @@ export const StudentSchema = new mongoose.Schema<IStudent>({
   },
   full_name: {
     type: String,
-    required: true,
+    required: [true, "Nama Murid wajib diisi!"],
   },
   kelas: {
     type: String,
-    required: true,
+    required: [true, "Kelas wajib diisi!"],
   },
   sub_kelas: {
     type: String,
   },
   username: {
     type: String,
-    required: true,
+    required: [true, "Username wajib diisi!"],
   },
   password: {
     type: String,
-    required: true,
+    required: [true, "Password wajib diisi!"],
   },
   created_at: {
     type: Date,
