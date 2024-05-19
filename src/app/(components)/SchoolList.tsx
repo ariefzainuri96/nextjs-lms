@@ -1,23 +1,13 @@
-import { validateRequest } from "@/lib/auth/lucia";
-import { ISchool, School } from "@/lib/models/school";
 import Link from "next/link";
 import React from "react";
 import { IcEdit, IcTrash } from "@/components/Icons";
 import { AddOrEditSchoolModal } from "./AddOrEditSchoolModal";
 import ButtonModalAction from "@/components/ButtonModalAction";
 import { DeleteDataDialog } from "@/components/DeleteDataDialog";
-import { deleteSchool } from "../actions";
+import { deleteSchool, getSchoolCached } from "../actions";
 
 const SchoolList = async () => {
-  const { user } = await validateRequest();
-  const schools: ISchool[] = (
-    await School.where({
-      user_id: user?.id,
-    })
-  ).map((element) => {
-    const obj: ISchool = JSON.parse(JSON.stringify(element));
-    return obj;
-  });
+  const schools = await getSchoolCached();
 
   return (
     <div className="mt-2 grid grid-cols-3 gap-2">

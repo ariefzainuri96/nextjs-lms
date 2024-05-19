@@ -3,8 +3,8 @@
 import { lucia, validateRequest } from "@/lib/auth/lucia";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { School } from "@/lib/models/school";
-import { revalidatePath } from "next/cache";
+import { ISchool, School } from "@/lib/models/school";
+import { revalidatePath, unstable_cache } from "next/cache";
 import dbConnect from "@/lib/db/mongoose";
 import { randomUUID } from "crypto";
 
@@ -86,3 +86,19 @@ export async function deleteSchool(_: any, formData: FormData) {
     return `${error}`;
   }
 }
+
+async function getSchool() {
+  const { user } = await validateRequest();
+  const schools: ISchool[] = (
+    await School.where({
+      user_id: user?.id,
+    })
+  ).map((element) => {
+    const obj: ISchool = JSON.parse(JSON.stringify(element));
+    return obj;
+  });
+
+  return schools;
+}
+
+export const getSchoolCached = unstable_cache(getSchool);
