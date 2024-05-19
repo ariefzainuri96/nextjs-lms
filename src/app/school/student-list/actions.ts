@@ -6,7 +6,7 @@ import { IStudent, Student } from "@/lib/models/student";
 import { User } from "@/lib/models/user";
 import { delay } from "@/lib/utils/common_functions";
 import { randomUUID } from "crypto";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, unstable_cache } from "next/cache";
 
 const bcrypt = require("bcrypt");
 
@@ -85,14 +85,17 @@ export async function deleteStudent(_: any, formData: FormData) {
   }
 }
 
-export async function getStudents(schoolId: string): Promise<IStudent[]> {
-  console.log(`schoolId ${schoolId}`);
-
+export async function getStudents(schoolId: string) {
   try {
     await dbConnect();
 
-    const students: IStudent[] = await Student.where({
-      school_id: schoolId,
+    const students: IStudent[] = (
+      await Student.where({
+        school_id: schoolId,
+      })
+    ).map((element) => {
+      const obj: IStudent = JSON.parse(JSON.stringify(element));
+      return obj;
     });
 
     return students;

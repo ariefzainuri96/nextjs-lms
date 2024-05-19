@@ -5,7 +5,6 @@ import { headers } from "next/headers";
 import ButtonModalAction from "@/components/ButtonModalAction";
 import { AddOrEditStudentModal } from "./AddOrEditStudentModal";
 import { IStudent } from "@/lib/models/student";
-import { delay } from "@/lib/utils/common_functions";
 
 const StudentList = async () => {
   const headersList = headers();
@@ -13,14 +12,7 @@ const StudentList = async () => {
   const params = new URL(headerUrl).searchParams;
   const pathname = new URL(headerUrl).pathname;
 
-  console.log(`fullUrl ${pathname}?${params}`);
-
-  const students: IStudent[] = (
-    await getStudents(params.get("schoolId") ?? "")
-  ).map((element) => {
-    const obj: IStudent = JSON.parse(JSON.stringify(element));
-    return obj;
-  });
+  const students: IStudent[] = await getStudents(params.get("schoolId") ?? "");
 
   return (
     <>
