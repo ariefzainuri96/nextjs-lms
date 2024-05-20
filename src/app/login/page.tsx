@@ -1,10 +1,11 @@
 "use client";
 
 import { useFormState, useFormStatus } from "react-dom";
-import CustomInput from "@/components/CustomInput";
+
 import Button from "@/components/Button";
-import { login } from "./actions";
+import CustomInput from "@/components/CustomInput";
 import Link from "next/link";
+import { login } from "./actions";
 
 export default function Page() {
   const [message, dispatch] = useFormState(login, undefined);
@@ -34,5 +35,8 @@ export default function Page() {
 const ButtonSubmit = () => {
   const { pending } = useFormStatus();
 
-  return <Button disabled={pending} type="submit" content={"Login"} />;
+  return <Button disabled={pending} pending={pending} type="submit" content={"Login"} className={
+    "btn-filled-primary flex-1 " +
+    (pending ? "bg-slate-400 hover:bg-slate-400" : "")
+  } />;
 };
