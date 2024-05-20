@@ -3,6 +3,7 @@ import { Lucia, Session, User } from "lucia";
 import mongoose from "mongoose";
 import { cookies } from "next/headers";
 import { cache } from "react";
+import dbConnect from "../db/mongoose";
 
 const adapter = new MongodbAdapter(
   mongoose.connection.collection("sessions"),
@@ -26,6 +27,8 @@ export const validateRequest = cache(
   async (): Promise<
     { user: User; session: Session } | { user: null; session: null }
   > => {
+    await dbConnect();
+
     const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
     if (!sessionId) {
       return {

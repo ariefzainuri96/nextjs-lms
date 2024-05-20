@@ -63,12 +63,11 @@ export async function addOrUpdateStudent(_: any, formData: FormData) {
 }
 
 export async function deleteStudent(_: any, formData: FormData) {
-  await dbConnect();
-
   const studentId = formData.get("id")?.toString();
   const lastUrl = formData.get("lastUrl")?.toString();
 
   try {
+    await dbConnect();
     const _student = await Student.deleteOne({
       _id: studentId,
     });
@@ -100,6 +99,6 @@ export async function getStudents(schoolId: string) {
     return students;
   } catch (error) {
     console.log(error);
-    return [];
+    throw new Error("Gagal mendapatkan data murid!");
   }
 }

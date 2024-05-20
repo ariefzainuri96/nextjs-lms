@@ -18,8 +18,6 @@ export default async function Home() {
     redirect("/login");
   }
 
-  await dbConnect();
-
   const profile: IUser | null = await User.findOne({
     username: user.username,
   });

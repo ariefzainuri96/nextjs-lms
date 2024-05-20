@@ -30,10 +30,6 @@ export async function logout(_: FormData) {
 }
 
 export async function addOrUpdateSchool(_: any, formData: FormData) {
-  await dbConnect();
-
-  const { user } = await validateRequest();
-
   const name = formData.get("school_name")?.toString();
   const schoolId = formData.get("schoolId")?.toString();
 
@@ -59,6 +55,10 @@ export async function addOrUpdateSchool(_: any, formData: FormData) {
   }
 
   try {
+    await dbConnect();
+
+    const { user } = await validateRequest();
+
     var content;
 
     if (schoolId) {
@@ -86,13 +86,11 @@ export async function addOrUpdateSchool(_: any, formData: FormData) {
 }
 
 export async function deleteSchool(_: any, formData: FormData) {
-  await dbConnect();
-
   const schoolId = formData.get("id")?.toString();
 
-  console.log(schoolId);
-
   try {
+    await dbConnect();
+
     const _school = await School.deleteOne({
       _id: schoolId,
     });
@@ -110,17 +108,22 @@ export async function deleteSchool(_: any, formData: FormData) {
 }
 
 async function getSchool() {
-  const { user } = await validateRequest();
-  const schools: ISchool[] = (
-    await School.where({
-      user_id: user?.id,
-    })
-  ).map((element) => {
-    const obj: ISchool = JSON.parse(JSON.stringify(element));
-    return obj;
-  });
+  try {
+    await dbConnect();
+    const { user } = await validateRequest();
+    const schools: ISchool[] = (
+      await School.where({
+        user_id: user?.id,
+      })
+    ).map((element) => {
+      const obj: ISchool = JSON.parse(JSON.stringify(element));
+      return obj;
+    });
 
-  return schools;
+    return schools;
+  } catch (error) {
+    throw new Error("Gagal mendapatkan data sekolah!");
+  }
 }
 
 export const getSchoolCached = unstable_cache(getSchool);

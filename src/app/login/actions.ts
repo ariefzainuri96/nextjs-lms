@@ -12,27 +12,30 @@ export async function login(_: any, formData: FormData) {
   const username = formData.get("username");
   const password = formData.get("password");
 
-  // you can use zod or any other library to validate the formData
+  try {
+    await dbConnect();
 
-  await dbConnect();
-  const existingUser = await User.findOne({ username: username });
+    const existingUser = await User.findOne({ username: username });
 
-  if (!existingUser) {
-    return "Data user tidak ditemukan";
+    if (!existingUser) {
+      return "Data user tidak ditemukan!";
+    }
+
+    const validPassword = await bcrypt.compare(password, existingUser.password);
+
+    if (!validPassword) {
+      return "Username atau Password yang anda masukkan salah!";
+    }
+
+    const session = await lucia.createSession(existingUser._id, {});
+    const sessionCookie = lucia.createSessionCookie(session.id);
+    cookies().set(
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes,
+    );
+    return redirect("/");
+  } catch (error) {
+    throw new Error("Gagal melakukan login");
   }
-
-  const validPassword = await bcrypt.compare(password, existingUser.password);
-
-  if (!validPassword) {
-    return "Password yan anda masukkan salah";
-  }
-
-  const session = await lucia.createSession(existingUser._id, {});
-  const sessionCookie = lucia.createSessionCookie(session.id);
-  cookies().set(
-    sessionCookie.name,
-    sessionCookie.value,
-    sessionCookie.attributes,
-  );
-  return redirect("/");
 }
