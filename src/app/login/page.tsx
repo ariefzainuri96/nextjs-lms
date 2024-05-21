@@ -35,8 +35,16 @@ export default function Page() {
 const ButtonSubmit = () => {
   const { pending } = useFormStatus();
 
-  return <Button disabled={pending} pending={pending} type="submit" content={"Login"} className={
-    "btn-filled-primary flex-1 " +
-    (pending ? "bg-slate-400 hover:bg-slate-400" : "")
-  } />;
+  return (
+    <Button
+      disabled={pending}
+      pending={pending}
+      type="submit"
+      content={"Login"}
+      className={
+        "btn-filled-primary " +
+        (pending ? "bg-slate-400 hover:bg-slate-400" : "")
+      }
+    />
+  );
 };

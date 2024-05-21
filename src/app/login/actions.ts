@@ -3,8 +3,9 @@
 import { lucia } from "@/lib/auth/lucia";
 import dbConnect from "@/lib/db/mongoose";
 import { User } from "@/lib/models/user";
+import { isRedirectError } from "next/dist/client/components/redirect";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { RedirectType, redirect } from "next/navigation";
 
 const bcrypt = require("bcrypt");
 
@@ -34,8 +35,11 @@ export async function login(_: any, formData: FormData) {
       sessionCookie.value,
       sessionCookie.attributes,
     );
-    return redirect("/");
   } catch (error) {
-    throw new Error("Gagal melakukan login");
+    if (isRedirectError(error)) throw error;
+
+    return `Gagal login: ${error}`;
   }
+
+  redirect("/", RedirectType.replace);
 }

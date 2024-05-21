@@ -4,8 +4,9 @@ import { lucia } from "@/lib/auth/lucia";
 import { RoleLevel } from "@/lib/common_enum";
 import dbConnect from "@/lib/db/mongoose";
 import { User } from "@/lib/models/user";
+import { isRedirectError } from "next/dist/client/components/redirect";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { RedirectType, redirect } from "next/navigation";
 
 const bcrypt = require("bcrypt");
 
@@ -33,8 +34,10 @@ export async function signup(_: any, formData: FormData) {
       sessionCookie.attributes,
     );
   } catch (e) {
+    if (isRedirectError(e)) throw e;
+
     return `${e}`;
   }
 
-  return redirect("/");
+  redirect("/", RedirectType.replace);
 }
