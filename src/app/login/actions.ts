@@ -3,6 +3,7 @@
 import { lucia } from "@/lib/auth/lucia";
 import dbConnect from "@/lib/db/mongoose";
 import { User } from "@/lib/models/user";
+import { revalidatePath } from "next/cache";
 import { isRedirectError } from "next/dist/client/components/redirect";
 import { cookies } from "next/headers";
 import { RedirectType, redirect } from "next/navigation";
@@ -41,5 +42,6 @@ export async function login(_: any, formData: FormData) {
     return `Gagal login: ${error}`;
   }
 
+  revalidatePath("/", "layout");
   redirect("/", RedirectType.replace);
 }

@@ -4,6 +4,7 @@ import { lucia } from "@/lib/auth/lucia";
 import { RoleLevel } from "@/lib/common_enum";
 import dbConnect from "@/lib/db/mongoose";
 import { User } from "@/lib/models/user";
+import { revalidatePath } from "next/cache";
 import { isRedirectError } from "next/dist/client/components/redirect";
 import { cookies } from "next/headers";
 import { RedirectType, redirect } from "next/navigation";
@@ -39,5 +40,6 @@ export async function signup(_: any, formData: FormData) {
     return `${e}`;
   }
 
+  revalidatePath("/", "layout");
   redirect("/", RedirectType.replace);
 }
