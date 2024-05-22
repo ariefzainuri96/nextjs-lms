@@ -8,6 +8,7 @@ import { revalidatePath, unstable_cache } from "next/cache";
 import dbConnect from "@/lib/db/mongoose";
 import { randomUUID } from "crypto";
 import { z } from "zod";
+import { ValidationMessage } from "@/lib/models/validation_message";
 
 export async function logout(_: FormData) {
   await dbConnect();
@@ -31,27 +32,34 @@ export async function logout(_: FormData) {
 
 export async function addOrUpdateSchool(_: any, formData: FormData) {
   const name = formData.get("school_name")?.toString();
+  const address = formData.get("school_address")?.toString();
   const schoolId = formData.get("schoolId")?.toString();
 
   const addSchoolSchema = z.object({
-    name: z.string().min(1, {
+    school_name: z.string().min(1, {
       message: "Nama sekolah tidak boleh kosong!",
+    }),
+    school_address: z.string().min(1, {
+      message: "Alamat sekolah tidak boleh kosong!",
     }),
   });
 
   const passValidation = addSchoolSchema.safeParse({
-    name: name,
+    school_name: name,
+    school_address: address,
   });
 
   if (!passValidation.success) {
     const { errors: err } = passValidation.error;
 
-    let stringErr = "";
-    err.forEach((element) => {
-      stringErr += `${element.message} - `;
+    const fullError: ValidationMessage[] = err.map((element) => {
+      return {
+        message: element.message,
+        name: `${element.path[0]}`,
+      };
     });
 
-    return `${stringErr.slice(0, -2)} [??] ${randomUUID()}`;
+    return fullError;
   }
 
   try {
@@ -64,24 +72,35 @@ export async function addOrUpdateSchool(_: any, formData: FormData) {
     if (schoolId) {
       content = await School.findByIdAndUpdate(schoolId, {
         school_name: name,
+        school_address: address,
       });
     } else {
       content = await School.create({
         user_id: user?.id,
         school_name: name,
+        school_address: address,
       });
     }
 
     if (!content) {
-      return `Gagal membuat sekolah [??] ${randomUUID()}`;
+      return [
+        {
+          message: `Gagal membuat sekolah [??] ${randomUUID()}`,
+          name: "school_address",
+        } as ValidationMessage,
+      ];
     }
 
     revalidatePath("/");
 
     return "success";
   } catch (error) {
-    console.log(`addOrUpdateSchoolError ${error}`);
-    return `${error} [??] ${randomUUID()}`;
+    return [
+      {
+        message: `${error} [??] ${randomUUID()}`,
+        name: "school_address",
+      } as ValidationMessage,
+    ];
   }
 }
 

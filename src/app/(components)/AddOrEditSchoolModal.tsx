@@ -5,29 +5,31 @@ import { addOrUpdateSchool } from "../actions";
 import CustomInput from "@/components/CustomInput";
 import Button from "@/components/Button";
 import { useEffect, useState } from "react";
+import { ValidationMessage } from "@/lib/models/validation_message";
+import { ISchool } from "@/lib/models/school";
 
 type AddOrEditSchoolModalProps = {
   modalId: string;
-  content?: string;
-  schoolId?: string;
+  data?: ISchool;
 };
 
 export const AddOrEditSchoolModal = ({
   modalId,
-  content,
-  schoolId,
+  data,
 }: AddOrEditSchoolModalProps) => {
-  const [showError, setShowError] = useState(true);
+  const [school, setSchool] = useState(data);
+  const [showError, setShowError] = useState(false);
   const [message, dispatch] = useFormState(addOrUpdateSchool, undefined);
 
   useEffect(() => {
     if (message) {
-      setShowError(message != "success");
+      setShowError(typeof message != "string");
     }
 
     const handleEsc = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setShowError(false);
+        setSchool(data);
       }
     };
     window.addEventListener("keydown", handleEsc);
@@ -35,7 +37,7 @@ export const AddOrEditSchoolModal = ({
     return () => {
       window.removeEventListener("keydown", handleEsc);
     };
-  }, [message]);
+  }, [message, data]);
 
   // close modal after get success message
   if (message && message == "success" && typeof document != "undefined") {
@@ -46,19 +48,48 @@ export const AddOrEditSchoolModal = ({
     <dialog id={modalId} className="modal">
       <div className="modal-box">
         <h3 className="text-lg font-bold">
-          {content ? "Perbarui Sekolah" : "Tambah Sekolah"}
+          {data ? "Perbarui Sekolah" : "Tambah Sekolah"}
         </h3>
         <form action={dispatch}>
           <CustomInput
-            defaultValue={content ?? ""}
+            value={school?.school_name ?? ""}
+            onChange={(e) => {
+              setSchool(
+                (s) => ({ ...s, school_name: e.target.value }) as ISchool,
+              );
+            }}
             label={"Nama Sekolah"}
             name="school_name"
             className="mt-4"
-            message={showError ? message?.split(" [??] ")[0] : undefined}
+            message={
+              showError
+                ? (message as ValidationMessage[]).find(
+                    (element) => element.name == "school_name",
+                  )?.message
+                : undefined
+            }
+          />
+          <CustomInput
+            value={school?.school_address ?? ""}
+            onChange={(e) => {
+              setSchool(
+                (s) => ({ ...s, school_address: e.target.value }) as ISchool,
+              );
+            }}
+            label={"Alamat Sekolah"}
+            name="school_address"
+            className="mt-4"
+            message={
+              showError
+                ? (message as ValidationMessage[]).find(
+                    (element) => element.name == "school_address",
+                  )?.message
+                : undefined
+            }
           />
           <input
             name="schoolId"
-            value={schoolId ?? ""}
+            value={data?._id ?? ""}
             hidden={true}
             readOnly
           />
@@ -68,6 +99,8 @@ export const AddOrEditSchoolModal = ({
                 e.preventDefault();
 
                 setShowError(false);
+                setSchool(data);
+
                 (document.getElementById(modalId) as HTMLFormElement).close();
               }}
               type="button"
@@ -75,7 +108,7 @@ export const AddOrEditSchoolModal = ({
             >
               Cancel
             </button>
-            <ButtonTambah content={content == null ? undefined : content} />
+            <ButtonTambah content={data} />
           </div>
         </form>
       </div>
@@ -83,7 +116,7 @@ export const AddOrEditSchoolModal = ({
   );
 };
 
-function ButtonTambah({ content }: { content?: string }) {
+function ButtonTambah({ content }: { content?: ISchool }) {
   const { pending } = useFormStatus();
 
   return (

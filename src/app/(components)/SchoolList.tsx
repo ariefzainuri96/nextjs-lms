@@ -10,14 +10,11 @@ const SchoolList = async () => {
   const schools = await getSchoolCached();
 
   return (
-    <div className="mt-2 grid grid-cols-3 gap-2">
+    <div className="mt-2 grid grid-cols-3 gap-2 overflow-y-auto sm:grid-cols-4">
       {schools.map((element, index) => {
         return (
-          <div key={index}>
-            <Link
-              className="btn-outlined flex w-full flex-row hover:bg-slate-50"
-              href={`/school/student-list?schoolId=${element._id}`}
-            >
+          <div className="btn-outlined hover:bg-slate-50" key={index}>
+            <Link href={`/school/student-list?schoolId=${element._id}`}>
               <div className="flex flex-col items-start ">
                 <p className="line-clamp-1 text-wrap">
                   {`${element.school_name}\n`}
@@ -42,8 +39,7 @@ const SchoolList = async () => {
               </div>
             </Link>
             <AddOrEditSchoolModal
-              content={element.school_name}
-              schoolId={element._id}
+              data={element}
               modalId={`add-${element._id}`}
             />
             <DeleteDataDialog

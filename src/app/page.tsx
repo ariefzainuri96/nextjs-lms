@@ -28,7 +28,7 @@ export default async function Home() {
 
   return (
     <div className="mx-4 flex flex-col items-start">
-      <div className="mt-2 flex flex-row gap-2 overflow-y-auto">
+      <div className="mt-2 flex flex-row gap-2 overflow-x-auto">
         <>
           <ButtonModalAction className="btn-outlined" modalId={Modal.AddSchool}>
             Tambah Sekolah
@@ -42,9 +42,11 @@ export default async function Home() {
         </form>
       </div>
       <p className="mt-2">Daftar Sekolah</p>
-      <Suspense fallback={<SchoolListSkeleton />}>
-        <SchoolList />
-      </Suspense>
+      <div className="w-full flex-1">
+        <Suspense fallback={<SchoolListSkeleton />}>
+          <SchoolList />
+        </Suspense>
+      </div>
     </div>
   );
 }

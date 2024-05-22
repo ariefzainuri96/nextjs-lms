@@ -5,8 +5,10 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://nextjs-lms-taupe.vercel.app"),
   title: "LMS",
-  description: "",
+  description:
+    "Place where you can use this website as Learning Management System",
 };
 
 export const viewport: Viewport = {

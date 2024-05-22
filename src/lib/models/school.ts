@@ -4,6 +4,7 @@ export interface ISchool {
   _id: string;
   user_id?: string;
   school_name?: string;
+  school_address?: string;
   created_at?: Date;
   updated_at?: Date;
 }
@@ -16,6 +17,10 @@ export const SchoolSchema = new mongoose.Schema<ISchool>({
   school_name: {
     type: String,
     required: [true, "Nama sekolah wajib diisi!"],
+  },
+  school_address: {
+    type: String,
+    required: [true, "Alamat sekolah wajib diisi!"],
   },
   created_at: {
     type: Date,
