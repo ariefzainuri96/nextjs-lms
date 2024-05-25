@@ -5,8 +5,11 @@ import { AddOrEditSchoolModal } from "./AddOrEditSchoolModal";
 import ButtonModalAction from "@/components/ButtonModalAction";
 import { DeleteDataDialog } from "@/components/DeleteDataDialog";
 import { deleteSchool, getSchool } from "../actions";
+import { unstable_noStore as noStore } from "next/cache";
 
 const SchoolList = async () => {
+  noStore();
+
   const schools = await getSchool();
 
   return (

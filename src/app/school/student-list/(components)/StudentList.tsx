@@ -5,8 +5,11 @@ import { headers } from "next/headers";
 import ButtonModalAction from "@/components/ButtonModalAction";
 import { AddOrEditStudentModal } from "./AddOrEditStudentModal";
 import { IStudent } from "@/lib/models/student";
+import { unstable_noStore as noStore } from "next/cache";
 
 const StudentList = async () => {
+  noStore();
+
   const headersList = headers();
   const headerUrl = headersList.get("x-url") || "";
   const params = new URL(headerUrl).searchParams;
