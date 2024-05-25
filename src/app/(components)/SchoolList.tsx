@@ -4,10 +4,10 @@ import { IcEdit, IcTrash } from "@/components/Icons";
 import { AddOrEditSchoolModal } from "./AddOrEditSchoolModal";
 import ButtonModalAction from "@/components/ButtonModalAction";
 import { DeleteDataDialog } from "@/components/DeleteDataDialog";
-import { deleteSchool, getSchoolCached } from "../actions";
+import { deleteSchool, getSchool } from "../actions";
 
 const SchoolList = async () => {
-  const schools = await getSchoolCached();
+  const schools = await getSchool();
 
   return (
     <div className="mt-2 grid grid-cols-3 gap-2 overflow-y-auto sm:grid-cols-4">

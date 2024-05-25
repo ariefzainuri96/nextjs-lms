@@ -126,7 +126,7 @@ export async function deleteSchool(_: any, formData: FormData) {
   }
 }
 
-async function getSchool() {
+export async function getSchool() {
   try {
     await dbConnect();
     const { user } = await validateRequest();
@@ -144,5 +144,3 @@ async function getSchool() {
     throw new Error("Gagal mendapatkan data sekolah!");
   }
 }
-
-export const getSchoolCached = unstable_cache(getSchool);
